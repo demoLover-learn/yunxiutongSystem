@@ -1,0 +1,13 @@
+package org.example.yunxiutong;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.context.SpringBootTest;
+
+@SpringBootTest
+class YunxiutongDispatchSystemApplicationTests {
+
+    @Test
+    void contextLoads() {
+    }
+
+}
