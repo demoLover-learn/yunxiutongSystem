@@ -9,7 +9,7 @@ spring:
     driver-class-name: ${YXT.datasource.driver-class-name}
     username: ${YXT.datasource.username}
     password: ${YXT.datasource.password}
-    url:  jdbc:mysql://${YXT.datasource.host}:${YXT.datasource.port}/${YXT.datasource.database}??serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+    url:  jdbc:mysql://${YXT.datasource.host}:${YXT.datasource.port}/${YXT.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
 mybatis:
   configuration:
     #??????
@@ -25,4 +25,12 @@ logging:
         mapper: debug
         service:  info
         controller: info
+yxt:
+  jwt:
+    # 设置jwt签名加密时使用的秘钥
+    adminSecretKey: yxt-woaini-zhendema-zhende1-woyeaini
+    # 设置jwt过期时间
+    adminTtl: 7200000
+    # 设置前端传递过来的令牌名称
+    adminTokenName: token
 
