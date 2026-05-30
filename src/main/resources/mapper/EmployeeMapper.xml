@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mapper.EmployeeMapper">
+    <update id="update" parameterType="org.example.entity.User">
+        update user
+        <set>
+            <if test="phone!=null">
+                phone=#{phone},
+            </if>
+            <if test="password!=null">
+                password=#{password},
+            </if>
+            <if test="nickname!=null">
+                nickname=#{nickname},
+            </if>
+            <if test="avatar!=null">
+                avatar=#{avatar},
+            </if>
+            <if test="status!=null">
+                status=#{status},
+            </if>
+            <if test="updateTime!=null">
+                update_Time=#{updateTime},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+
+    <select id="getUser" resultType="org.example.entity.User"
+            parameterType="org.example.dto.UserAdminPageQueryDTO">
+        select * from user
+        <where>
+            <if test="nickname!=null and nickname!=''">
+                and nickname like concat('%',#{nickname},'%')
+            </if>
+        <if test="phone!=null and phone!=''">
+            and phone like concat('%',#{phone},'%')
+        </if>
+        <if test="status!=null">
+            and status=#{status}
+        </if>
+        </where>
+    </select>
+</mapper>

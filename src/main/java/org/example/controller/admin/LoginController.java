@@ -1,27 +1,20 @@
 package org.example.controller.admin;
 
 
-import io.jsonwebtoken.JwtBuilder;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import io.jsonwebtoken.security.Keys;
+import jakarta.annotation.Resource;
+import org.example.Result.PageResult;
 import org.example.Result.Result;
 import org.example.dto.LoginDTO;
+import org.example.dto.UserAdminPageQueryDTO;
 import org.example.entity.Employee;
 import org.example.properties.JwtProperties;
 import org.example.service.EmployeeService;
 import org.example.util.JwtUtil;
 import org.example.vo.EmployeeLoginVO;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
-import javax.crypto.SecretKey;
 import javax.security.auth.login.AccountException;
-import java.nio.charset.StandardCharsets;
-import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -32,6 +25,7 @@ public class LoginController {
     private EmployeeService employeeService;
     @Autowired
     private JwtProperties jwtProperties;
+
 
     /**
      * 管理员登陆
@@ -57,8 +51,31 @@ public class LoginController {
                 .name(employee.getName())
                 .build();
             return Result.success(employeeLoginVO);
-
     }
+
+
+    /**
+     * 用户管理分页查询
+     * @param pageQueryDTO
+     * @return
+     */
+    @GetMapping("/users")
+    public Result<PageResult> getUser(UserAdminPageQueryDTO pageQueryDTO) {
+        PageResult pageResult= employeeService.getUser(pageQueryDTO);
+        return Result.success(pageResult);
+    }
+
+    /**
+     * 更改账号状态
+     * @param id
+     * @return
+     */
+    @PutMapping("/users/{id}/status")
+    public Result stopOrStart(@PathVariable Long id){
+        employeeService.stopOrStart(id);
+        return Result.success();
+    }
+
 
 
 }

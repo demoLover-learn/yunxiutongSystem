@@ -43,10 +43,11 @@ public class AdminInterceptor implements HandlerInterceptor {
            //抛异常表示有错误
            Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
            //获取当前用户id
-           Long empId = (Long) claims.get("empId");
+           Long empId =((Number) claims.get("empId")).longValue();
            BaseContext.setCurrentId(empId);
            return true;
        }catch (Exception e){
+           e.printStackTrace();
            response.setStatus(401);
            return false;
        }

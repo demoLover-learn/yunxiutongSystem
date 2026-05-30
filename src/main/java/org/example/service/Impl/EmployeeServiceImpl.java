@@ -1,18 +1,26 @@
 package org.example.service.Impl;
 
+import com.github.pagehelper.Page;
+import com.github.pagehelper.PageHelper;
+import jakarta.annotation.Resource;
+import org.example.Result.PageResult;
 import org.example.dto.LoginDTO;
+import org.example.dto.UserAdminPageQueryDTO;
 import org.example.entity.Employee;
+import org.example.entity.User;
 import org.example.mapper.EmployeeMapper;
 import org.example.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import javax.security.auth.login.AccountException;
+import java.util.List;
 
 @Service
 public class EmployeeServiceImpl  implements EmployeeService {
     @Autowired
     private EmployeeMapper employeeMapper;
+
 
 
     /**
@@ -32,5 +40,37 @@ public class EmployeeServiceImpl  implements EmployeeService {
             throw new AccountException("账号已经被锁定");
         }
         return employee;
+    }
+
+    /**
+     * 用户管理分页查询
+     * @param pageQueryDTO
+     * @return
+     */
+    @Override
+    public PageResult getUser(UserAdminPageQueryDTO pageQueryDTO) {
+        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+        //根据pageQuery的内容查询对应的内容
+        //select * from user where nickname=${nickname} and phone like concat${'%',${phone},'%'} and status=${status}
+        Page<User> page= employeeMapper.getUser(pageQueryDTO);
+        //pageresult的记录总数pigeSize,
+        long total = page.getTotal();
+        List<User> result = page.getResult();
+        return new PageResult(total,result);
+
+    }
+    /**
+     * 更改账号状态
+     * @param id
+     * @return
+     */
+    @Override
+    public void stopOrStart(Long id) {
+        //1.根据用户id查询出对应的数据
+        User user=employeeMapper.getById(id);
+        //2.判断用户的状态，如果为0，则变成1，
+        user.setStatus(user.getStatus()==0?1:0);
+        //更新数据库
+        employeeMapper.update(user);
     }
 }
