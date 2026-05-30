@@ -26,6 +26,24 @@
         </set>
         where id=#{id}
     </update>
+    <!--更新工人数据库信息-->
+    <update id="updateWorker" parameterType="org.example.entity.Worker">
+        update worker
+        <set>
+            <if test="name!=null">name=#{name},</if>
+            <if test="phone!=null">phone=#{phone},</if>
+            <if test="gender!=null">gender=#{gender},</if>
+            <if test="skillDesc!=null">skill_desc=#{skillDesc},</if>
+            <if test="serviceStatus!=null">service_status=#{serviceStatus},</if>
+            <if test="latitude!=null">latitude=#{latitude},</if>
+            <if test="longitude!=null">longitude=#{longitude},</if>
+            <if test="rating!=null">rating=#{rating},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="createTime!=null">create_time=#{createTime},</if>
+            <if test="updateTime!=null">update_time=#{updateTime},</if>
+        </set>
+        where id=#{id}
+    </update>
 
 
     <select id="getUser" resultType="org.example.entity.User"
@@ -43,4 +61,18 @@
         </if>
         </where>
     </select>
+    <!--模糊查询工人的信息-->
+    <select id="getWorker" resultType="org.example.entity.Worker"
+            parameterType="org.example.dto.WorkerAdminPageQueryDTO">
+        select * from worker
+        <where>
+            <if test="name!=null">
+                and name like concat('%',#{name},'%')
+            </if>
+        <if test="status!=null">
+            and status=#{status}
+        </if>
+        </where>
+    </select>
+
 </mapper>

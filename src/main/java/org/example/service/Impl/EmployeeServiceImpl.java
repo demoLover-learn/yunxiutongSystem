@@ -4,14 +4,18 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
+import org.example.Result.Result;
 import org.example.dto.LoginDTO;
 import org.example.dto.UserAdminPageQueryDTO;
+import org.example.dto.WorkerAdminPageQueryDTO;
 import org.example.entity.Employee;
 import org.example.entity.User;
+import org.example.entity.Worker;
 import org.example.mapper.EmployeeMapper;
 import org.example.service.EmployeeService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import javax.security.auth.login.AccountException;
 import java.util.List;
@@ -72,5 +76,36 @@ public class EmployeeServiceImpl  implements EmployeeService {
         user.setStatus(user.getStatus()==0?1:0);
         //更新数据库
         employeeMapper.update(user);
+    }
+    /**
+     * 服务人员管理
+     * @param queryDTO
+     * @return
+     */
+    public PageResult getWorker(WorkerAdminPageQueryDTO queryDTO) {
+        //设置开始页码，和一页的数量
+        PageHelper.startPage(queryDTO.getPage(),queryDTO.getPageSize());
+
+        //根据前端传来的信息进行模糊查询
+        Page<Worker> result=employeeMapper.getWorker(queryDTO);
+        //取出对应的数据
+        long total = result.getTotal();
+        List records = result.getResult();
+        return  new PageResult(total,records);
+    }
+    /**
+     * 工人账号状态的设置
+     * @param id
+     * @return
+     */
+    @Transactional
+    @Override
+    public void workerStatus(Long id) {
+        //1.根据工人id查询出对应的数据
+        Worker worker=employeeMapper.getByWorkerId(id);
+        //2.判断工人的状态，如果为0，则变成1，
+        worker.setStatus(worker.getStatus()==0?1:0);
+        //更新数据库
+        employeeMapper.updateWorker(worker);
     }
 }

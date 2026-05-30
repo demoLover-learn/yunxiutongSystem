@@ -1,10 +1,12 @@
 package org.example.controller.admin;
 
 
+import com.github.pagehelper.Page;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
 import org.example.dto.LoginDTO;
 import org.example.dto.UserAdminPageQueryDTO;
+import org.example.dto.WorkerAdminPageQueryDTO;
 import org.example.entity.Employee;
 import org.example.properties.JwtProperties;
 import org.example.service.EmployeeService;
@@ -72,6 +74,28 @@ public class AdminController {
     @PutMapping("/users/{id}/status")
     public Result stopOrStart(@PathVariable Long id){
         employeeService.stopOrStart(id);
+        return Result.success();
+    }
+
+    /**
+     * 服务人员管理
+     * @param queryDTO
+     * @return
+     */
+    @GetMapping("/workers")
+    public Result<PageResult> getWorker(WorkerAdminPageQueryDTO queryDTO) {
+        PageResult result=employeeService.getWorker(queryDTO);
+        return Result.success(result);
+    }
+
+    /**
+     * 工人账号状态的设置
+     * @param id
+     * @return
+     */
+    @PutMapping("/workers/{id}/status")
+    public Result workStatus(@PathVariable Long id){
+        employeeService.workerStatus(id);
         return Result.success();
     }
 
