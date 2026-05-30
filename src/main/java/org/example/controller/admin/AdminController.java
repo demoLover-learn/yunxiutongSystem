@@ -1,7 +1,6 @@
 package org.example.controller.admin;
 
 
-import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
 import org.example.dto.LoginDTO;
@@ -20,7 +19,7 @@ import java.util.Map;
 
 @RestController
 @RequestMapping("/api/admin/")
-public class LoginController {
+public class AdminController {
     @Autowired
     private EmployeeService employeeService;
     @Autowired
