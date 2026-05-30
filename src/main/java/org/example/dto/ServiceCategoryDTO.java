@@ -14,6 +14,8 @@ public class ServiceCategoryDTO {
     //页码内容大小
     private Integer pageSize;
 
+    private Long categoryId;
+
 
 
 }

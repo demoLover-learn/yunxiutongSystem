@@ -4,9 +4,12 @@ import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
 import org.example.dto.ServiceCategoryDTO;
+import org.example.entity.ServiceCategory;
 import org.example.service.ServiceCategoryService;
 import org.example.vo.ServiceCategoryVO;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/admin/service-categories")
@@ -68,5 +71,15 @@ public class ServiceCategoryController {
     @DeleteMapping("/{id}")
     public void delete(@PathVariable Long id) {
         serviceCategoryService.deleteById(id);
+    }
+
+    /**
+     * 查询所有分类
+     * @return
+     */
+    @GetMapping("/all")
+    public Result<List<ServiceCategory>> getCategory() {
+       List<ServiceCategory> serviceCategory = serviceCategoryService.getAllCategorys();
+        return Result.success(serviceCategory);
     }
 }

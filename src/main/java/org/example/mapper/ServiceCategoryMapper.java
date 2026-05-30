@@ -8,6 +8,8 @@ import org.example.dto.ServiceCategoryDTO;
 import org.example.entity.ServiceCategory;
 import org.example.vo.ServiceCategoryVO;
 
+import java.util.List;
+
 @Mapper
 public interface ServiceCategoryMapper {
 
@@ -46,4 +48,13 @@ public interface ServiceCategoryMapper {
      * @return
      */
     Long insert(ServiceCategory category);
+
+    /**
+     * 查询所有信息
+     * @return
+     */
+    @Select("select * from service_category;")
+    List<ServiceCategory> getAll();
+
+
 }

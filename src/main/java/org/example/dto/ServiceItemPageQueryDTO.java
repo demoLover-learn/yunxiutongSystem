@@ -14,5 +14,7 @@ public class ServiceItemPageQueryDTO {
     private Integer page;
     //页码大小
     private Integer pageSize;
+    //分类id
+    private Long categoryId;
 
 }

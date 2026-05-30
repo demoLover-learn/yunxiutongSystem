@@ -2,7 +2,10 @@ package org.example.service;
 
 import org.example.Result.PageResult;
 import org.example.dto.ServiceCategoryDTO;
+import org.example.entity.ServiceCategory;
 import org.example.vo.ServiceCategoryVO;
+
+import java.util.List;
 
 public interface ServiceCategoryService {
 
@@ -37,5 +40,9 @@ public interface ServiceCategoryService {
      * @param id
      */
     void deleteById(Long id);
-
+    /**
+     * 查询所有分类
+     * @return
+     */
+    List<ServiceCategory> getAllCategorys();
 }

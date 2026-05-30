@@ -16,6 +16,8 @@ public class ServiceItem {
     private Long id;
     //分类id
     private Long categoryId;
+    //分类名称（非数据库字段，仅用于列表显示）
+    private String categoryName;
     //服务名称
     private String name;
     //基础价格
