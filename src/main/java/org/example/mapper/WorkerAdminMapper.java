@@ -6,6 +6,8 @@ import org.apache.ibatis.annotations.Select;
 import org.example.dto.WorkerAdminPageQueryDTO;
 import org.example.entity.Worker;
 
+import java.util.List;
+
 @Mapper
 public interface WorkerAdminMapper {
 
@@ -17,7 +19,7 @@ public interface WorkerAdminMapper {
     Page<Worker> getWorker(WorkerAdminPageQueryDTO queryDTO);
 
     /**
-     * 根据id查询工人信息
+     * 模糊查询
      * @param id
      * @return
      */
@@ -30,5 +32,15 @@ public interface WorkerAdminMapper {
      */
 
     void updateWorker(Worker worker);
+
+    /**
+     * 筛选合适的师傅
+     * @return
+     */
+    @Select("select * from worker where status=1 and service_status=1")
+    List<Worker> selectWorker();
+
+
+
 
 }

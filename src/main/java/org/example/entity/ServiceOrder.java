@@ -26,7 +26,7 @@ public class ServiceOrder {
     private Long addressId;
     //预约上门时间
     private LocalDateTime appointmentTime;
-    //工单状态
+    //工单状态 0'待接单',1'已接单' 2,'服务中' 3,'已完成' 4,'已取消'
     private Integer status;
     //支付状态
     private  Integer payStatus;
@@ -50,5 +50,13 @@ public class ServiceOrder {
     private LocalDateTime cancelTime;
     //更新时间
     private LocalDateTime updateTime;
+
+    // 非数据库字段，仅用于列表/详情展示
+    private String userName;         // 用户昵称
+    private String userPhone;        // 用户手机号
+    private String serviceItemName;  // 服务项目名
+    private String workerName;       // 师傅姓名
+    private String address;          // 拼接后的完整地址
+    private String orderStatusName;  // 状态中文名
 
 }

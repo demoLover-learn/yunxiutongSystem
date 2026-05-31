@@ -21,17 +21,7 @@
         </set>
         where id=#{id}
     </update>
-    <!--模糊查询工人的信息-->
     <select id="getWorker" resultType="org.example.entity.Worker"
-            parameterType="org.example.dto.WorkerAdminPageQueryDTO">
-        select * from worker
-        <where>
-            <if test="name!=null">
-                and name like concat('%',#{name},'%')
-            </if>
-            <if test="status!=null">
-                and status=#{status}
-            </if>
-        </where>
-    </select>
+            parameterType="org.example.dto.WorkerAdminPageQueryDTO"></select>
+
 </mapper>

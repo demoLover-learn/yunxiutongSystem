@@ -2,6 +2,9 @@ package org.example.service;
 
 import org.example.Result.PageResult;
 import org.example.dto.WorkerAdminPageQueryDTO;
+import org.example.entity.Worker;
+
+import java.util.List;
 
 public interface WorkerAdminService {
 
@@ -17,4 +20,11 @@ public interface WorkerAdminService {
      * @return
      */
     void workerStatus(Long id,WorkerAdminPageQueryDTO queryDTO);
+    /**
+     * 筛选合适的师傅
+     * @return
+     */
+    List<Worker> selectWorker();
+
+
 }
