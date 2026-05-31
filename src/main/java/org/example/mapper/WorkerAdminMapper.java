@@ -13,10 +13,10 @@ public interface WorkerAdminMapper {
 
     /**
      * 模糊查询工人的信息
-     * @param queryDTO
+     * @param worker
      * @return
      */
-    Page<Worker> getWorker(WorkerAdminPageQueryDTO queryDTO);
+    Page<Worker> getWorker(Worker worker);
 
     /**
      * 模糊查询

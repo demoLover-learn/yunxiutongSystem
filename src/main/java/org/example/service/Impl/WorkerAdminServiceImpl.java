@@ -22,8 +22,7 @@ import java.util.List;
 public class WorkerAdminServiceImpl implements WorkerAdminService {
     @Resource
     private WorkerAdminMapper workerAdminMapper;
-    @Resource
-    private AdminOrderManageMapper adminOrderManageMapper;
+
 
 
     /**
@@ -34,9 +33,10 @@ public class WorkerAdminServiceImpl implements WorkerAdminService {
     public PageResult getWorker(WorkerAdminPageQueryDTO queryDTO) {
         //设置开始页码，和一页的数量
         PageHelper.startPage(queryDTO.getPage(),queryDTO.getPageSize());
-
+        Worker worker = new Worker();
+        BeanUtils.copyProperties(queryDTO,worker);
         //根据前端传来的信息进行模糊查询
-        Page<Worker> result=workerAdminMapper.getWorker(queryDTO);
+        Page<Worker> result=workerAdminMapper.getWorker(worker);
         //取出对应的数据
         long total = result.getTotal();
         List records = result.getResult();

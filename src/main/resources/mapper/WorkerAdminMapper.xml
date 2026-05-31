@@ -22,6 +22,16 @@
         where id=#{id}
     </update>
     <select id="getWorker" resultType="org.example.entity.Worker"
-            parameterType="org.example.dto.WorkerAdminPageQueryDTO"></select>
+            parameterType="org.example.dto.WorkerAdminPageQueryDTO">
+        select * from worker
+        <where>
+            <if test="name!=null">
+                name like concat('%',#{name},'%')
+            </if>
+            <if test="status!=null">
+                and status=#{status}
+            </if>
+        </where>
+    </select>
 
 </mapper>
