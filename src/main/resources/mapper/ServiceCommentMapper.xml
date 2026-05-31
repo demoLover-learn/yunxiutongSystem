@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mapper.ServiceCommentMapper">
+
+
+    <select id="getServiceComment" resultType="org.example.entity.ServiceOrderComment"
+            parameterType="org.example.entity.ServiceOrderComment">
+        select soc.*,
+               u.nickname as userName,
+               w.name as workerName,
+               so.order_no as orderNo
+        from service_order_comment soc
+        inner join user u on soc.user_id=u.id
+        inner join worker w on soc.worker_id=w.id
+        inner join service_order so on soc.order_id=so.id
+        <where>
+            <if test="orderNo!=null and orderNo!=''">
+                so.order_no like concat('%',#{orderNo},'%')
+            </if>
+        <if test="userName!=null  and userName!=''">
+            and u.nickname like concat('%',#{userName},'%')
+        </if>
+        <if test="workerName!=null  and workerName!=''">
+            and w.name like concat('%',#{workerName},'%')
+        </if>
+        </where>
+        order by soc.create_time desc
+    </select>
+</mapper>

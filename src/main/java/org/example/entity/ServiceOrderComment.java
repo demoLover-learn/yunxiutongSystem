@@ -28,5 +28,13 @@ public class ServiceOrderComment {
     private LocalDateTime createTime;
 
 
+    //非数据库字段，
+    //工单编号
+    private String orderNo;
+    //用户名
+    private String userName;
+    //工人名称
+    private String workerName;
+
 
 }
