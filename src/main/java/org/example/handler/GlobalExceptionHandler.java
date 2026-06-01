@@ -11,7 +11,7 @@ public class GlobalExceptionHandler {
     //业务异常-消息返回前端
     @ExceptionHandler(RuntimeException.class)
     public Result handleRunTimeException(RuntimeException e){
-        log.error("业务异常:{}"+e.getMessage());
+        log.info("业务异常:{}"+e.getMessage());
         return Result.error(e.getMessage());
     }
 

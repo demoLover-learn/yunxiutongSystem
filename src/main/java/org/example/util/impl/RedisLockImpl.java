@@ -1,11 +1,9 @@
 package org.example.util.impl;
 
-import org.example.context.BaseContext;
 import org.example.util.RedisLock;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
-import org.springframework.stereotype.Service;
 
 import java.util.Collections;
 import java.util.concurrent.TimeUnit;
