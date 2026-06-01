@@ -23,7 +23,14 @@
     </update>
     <select id="getWorker" resultType="org.example.entity.Worker"
             parameterType="org.example.dto.WorkerAdminPageQueryDTO">
-        select * from worker
+        select w.*,
+               case w.service_status
+                when 0 then '休息中'
+                when 1 then '待接单'
+                when 2 then '服务中'
+                end as serviceStatusName,
+            (select count(*) from service_order so where so.worker_id=w.id ) as orderCount
+        from worker w
         <where>
             <if test="name!=null">
                 name like concat('%',#{name},'%')

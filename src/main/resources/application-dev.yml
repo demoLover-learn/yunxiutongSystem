@@ -6,3 +6,15 @@ YXT:
     database: yunxiutong
     username: root
     password: 123456
+STYX:
+  data:
+    redis:
+      port: 6379
+      host: 192.168.200.15
+      password: 123456
+      lettuce:
+        pool:
+          max-active: 10
+          min-idle: 0
+          max-idle: 10
+          time-between-eviction-runs: 10s

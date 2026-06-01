@@ -4,6 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
+import org.example.context.BaseContext;
 import org.example.dto.OrderManageDTO;
 import org.example.dto.WorkerAdminPageQueryDTO;
 import org.example.entity.ServiceOrder;
@@ -11,6 +12,9 @@ import org.example.entity.Worker;
 import org.example.mapper.AdminOrderManageMapper;
 import org.example.mapper.WorkerAdminMapper;
 import org.example.service.AdminOrderManageService;
+import org.example.util.RedisLock;
+import org.example.util.impl.RedisLockImpl;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -23,6 +27,8 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
     private AdminOrderManageMapper adminOrderManageMapper;
     @Resource
     private WorkerAdminMapper workerAdminMapper;
+    @Resource
+    private StringRedisTemplate stringRedisTemplate;
     /**
      * 工单管理分页查询
      * @param orderManageDTO
@@ -59,13 +65,21 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
     @Transactional
     @Override
     public void getOrder(Long id,Long workerId) {
+        RedisLock redisLock = new RedisLockImpl("order:"+id,stringRedisTemplate);
+        boolean isLock = redisLock.tryLock(10L);
+        if(!isLock){
+            throw new RuntimeException("派单繁忙，请重试");
+        }
+        try{
         //根据工单id查询对应的单子
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
-        Integer status = order.getStatus();
-        if (status==1){
-            throw new RuntimeException("订单已被接取");
+        if(order==null){
+            throw new RuntimeException("工单不存在");
         }
-
+        Integer status = order.getStatus();
+        if(status!=0){
+            throw new RuntimeException("该工单不可以被派单");
+        }
         //根据师傅的名字查询出师傅的id
         Worker worker= workerAdminMapper.getByWorkerId(workerId);
         if(worker==null||worker.getId()==null){
@@ -82,7 +96,10 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
         worker.setUpdateTime(LocalDateTime.now());
         workerAdminMapper.updateWorker(worker);
         //更新工单
-        adminOrderManageMapper.update(order);
+        adminOrderManageMapper.update(order);}
+        finally {
+            redisLock.unlock();
+        }
     }
 
     /**

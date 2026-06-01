@@ -10,6 +10,17 @@ spring:
     username: ${YXT.datasource.username}
     password: ${YXT.datasource.password}
     url:  jdbc:mysql://${YXT.datasource.host}:${YXT.datasource.port}/${YXT.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+  data:
+    redis:
+      host: ${STYX.data.redis.host}
+      password: ${STYX.data.redis.password}
+      lettuce:
+        pool:
+          max-active: ${STYX.data.redis.lettuce.pool.max-active}
+          min-idle: ${STYX.data.redis.lettuce.pool.min-idle}
+          max-idle: ${STYX.data.redis.lettuce.pool.max-idle}
+      port: ${STYX.data.redis.port}
+      database: 1
 mybatis:
   configuration:
     #??????
@@ -17,7 +28,6 @@ mybatis:
   #????
   mapper-locations: classpath:mapper/*.xml
   type-aliases-package: org.example.entity
-
 logging:
   level:
     org:
