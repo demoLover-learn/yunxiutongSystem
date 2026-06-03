@@ -1,23 +1,21 @@
 package org.example.service.Impl;
 
 import jakarta.annotation.Resource;
-import lombok.extern.slf4j.Slf4j;
-import org.example.Result.Result;
 import org.example.dto.UserDTO.UserLoginDTO;
 import org.example.dto.UserDTO.UserRegisterDTO;
 import org.example.entity.User;
-import org.example.mapper.UserLoginMapper;
-import org.example.service.UserLoginService;
+import org.example.mapper.UserAuthMapper;
+import org.example.service.UserAuthService;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
 
 @Service
-public class UserLoginServiceImpl implements UserLoginService {
+public class UserAuthServiceImpl implements UserAuthService {
 
     @Resource
-    private UserLoginMapper userLoginMapper;
+    private UserAuthMapper userAuthMapper;
     /**
      * 用户登陆
      * @param userLoginDTO
@@ -26,9 +24,7 @@ public class UserLoginServiceImpl implements UserLoginService {
     @Override
     public User userLogin(UserLoginDTO userLoginDTO) {
         //验证用户是否存在
-        User user = new User();
-        user.setPhone(userLoginDTO.getUsername());
-        User user1=userLoginMapper.getUser(user);
+        User user1= userAuthMapper.getUser(userLoginDTO.getUsername());
         //判断账号是否存在
         if (user1==null ){
             //不存在返回错误
@@ -60,12 +56,12 @@ public class UserLoginServiceImpl implements UserLoginService {
         user.setCreateTime(LocalDateTime.now());
         user.setStatus(1);
         //根据phone查询数据库，看看账号是否重复，重复抛出错误
-        User user1=userLoginMapper.getByPhone(userRegisterDTO.getPhone());
+        User user1= userAuthMapper.getByPhone(userRegisterDTO.getPhone());
         if (user1!=null){
             throw new RuntimeException("账号已存在，请直接登陆");
         }
         //保存到数据库
-        userLoginMapper.save(user);
+        userAuthMapper.save(user);
 
 
     }

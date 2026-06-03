@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
-<mapper namespace="org.example.mapper.UserLoginMapper">
+<mapper namespace="org.example.mapper.UserAuthMapper">
     <insert id="save" parameterType="org.example.entity.User">
         insert into user
         (phone, password, nickname, avatar,status, create_time, update_time)
@@ -10,6 +10,18 @@
         #{avatar},#{status},
         #{createTime},#{updateTime})
     </insert>
+    <update id="update" parameterType="org.example.entity.User">
+        update user
+        <set>
+            <if test="nickname!=null">nickname=#{nickname},</if>
+            <if test="avatar!=null">avatar=#{avatar},</if>
+            <if test="status!=null">status=#{status},</if>
+            <if test="updateTime!=null">update_time=#{updateTime},</if>
+        </set>
+        <where>
+            id=#{id}
+        </where>
+    </update>
     <select id="getUser" resultType="org.example.entity.User" parameterType="org.example.entity.User">
     select * from user
     where phone=#{phone}

@@ -5,13 +5,13 @@ import org.apache.ibatis.annotations.Select;
 import org.example.entity.User;
 
 @Mapper
-public interface UserLoginMapper {
+public interface UserAuthMapper {
     /**
      * 用户登陆
-     * @param user
+     * @param username
      * @return
      */
-    User getUser(User user);
+    User getUser(String username);
 
     /**
      * 根据电话号码查询对象
@@ -25,4 +25,10 @@ public interface UserLoginMapper {
      * @param user
      */
     void save(User user);
+
+    /**
+     * 更新数据库
+     * @param user
+     */
+    void update(User user);
 }

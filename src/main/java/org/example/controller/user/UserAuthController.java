@@ -2,14 +2,13 @@ package org.example.controller.user;
 
 
 import jakarta.annotation.Resource;
-import lombok.Builder;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.Result;
 import org.example.dto.UserDTO.UserLoginDTO;
 import org.example.dto.UserDTO.UserRegisterDTO;
 import org.example.entity.User;
 import org.example.properties.JwtProperties;
-import org.example.service.UserLoginService;
+import org.example.service.UserAuthService;
 import org.example.util.JwtUtil;
 import org.example.vo.UserLoginVO;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -24,10 +23,10 @@ import java.util.Map;
 
 @RequestMapping("/api/user")
 @Slf4j
-public class UserLoginController {
+public class UserAuthController {
 
     @Resource
-    private UserLoginService userLoginService;
+    private UserAuthService userAuthService;
     @Resource
     private JwtProperties jwtProperties;
 
@@ -38,7 +37,7 @@ public class UserLoginController {
      */
     @PostMapping("/login")
     public Result<UserLoginVO> userLogin(@RequestBody UserLoginDTO userLoginDTO) {
-        User user=userLoginService.userLogin(userLoginDTO);
+        User user= userAuthService.userLogin(userLoginDTO);
         Map<String,Object> claims=new HashMap<>();
         claims.put("userId",user.getId());
         //生成jwt令牌
@@ -65,7 +64,7 @@ public class UserLoginController {
      */
     @PostMapping("/register")
     public Result userRegister(@RequestBody UserRegisterDTO userRegisterDTO) {
-        userLoginService.userRegister(userRegisterDTO);
+        userAuthService.userRegister(userRegisterDTO);
         return Result.success();
     }
 

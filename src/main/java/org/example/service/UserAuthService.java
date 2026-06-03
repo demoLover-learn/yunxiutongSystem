@@ -4,7 +4,7 @@ import org.example.dto.UserDTO.UserLoginDTO;
 import org.example.dto.UserDTO.UserRegisterDTO;
 import org.example.entity.User;
 
-public interface UserLoginService {
+public interface UserAuthService {
     /**
      * 用户登陆
      * @param userLoginDTO
