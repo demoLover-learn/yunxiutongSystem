@@ -1,8 +1,7 @@
 package org.example.service;
 
 import org.example.Result.PageResult;
-import org.example.dto.ServiceItemPageQueryDTO;
-import org.example.vo.ServiceCategoryVO;
+import org.example.dto.AdminDTO.ServiceItemPageQueryDTO;
 import org.example.vo.ServiceItemVO;
 
 public interface ServiceItemService {

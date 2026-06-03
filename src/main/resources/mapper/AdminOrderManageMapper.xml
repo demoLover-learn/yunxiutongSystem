@@ -24,7 +24,7 @@
         where id=#{id}
     </update>
     <select id="getData" resultType="org.example.entity.ServiceOrder"
-            parameterType="org.example.dto.OrderManageDTO">
+            parameterType="org.example.dto.AdminDTO.OrderManageDTO">
     select so.*,
            u.nickname as userName,
         so.order_status as status,

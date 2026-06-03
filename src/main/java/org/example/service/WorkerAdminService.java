@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.Result.PageResult;
-import org.example.dto.WorkerAdminPageQueryDTO;
+import org.example.dto.AdminDTO.WorkerAdminPageQueryDTO;
 import org.example.entity.Worker;
 
 import java.util.List;

@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
-import org.example.dto.ServiceCommentPageQueryDTO;
+import org.example.dto.AdminDTO.ServiceCommentPageQueryDTO;
 import org.example.entity.ServiceOrderComment;
 import org.example.mapper.ServiceCommentMapper;
 import org.example.service.ServiceCommentService;

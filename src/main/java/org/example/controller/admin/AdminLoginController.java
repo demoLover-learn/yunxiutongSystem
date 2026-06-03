@@ -2,7 +2,7 @@ package org.example.controller.admin;
 
 
 import org.example.Result.Result;
-import org.example.dto.LoginDTO;
+import org.example.dto.AdminDTO.LoginDTO;
 import org.example.entity.Employee;
 import org.example.properties.JwtProperties;
 import org.example.service.AdminLoginService;

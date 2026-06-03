@@ -22,7 +22,7 @@
 
 
     <select id="selectAll" resultType="org.example.entity.ServiceItem"
-            parameterType="org.example.dto.ServiceItemPageQueryDTO">
+            parameterType="org.example.dto.AdminDTO.ServiceItemPageQueryDTO">
         select si.*,sc.name as categoryName from service_item  si left join service_category sc on si.category_id=sc.id
         <where>
             <if test="categoryId!=null">

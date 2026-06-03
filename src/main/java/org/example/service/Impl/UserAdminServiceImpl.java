@@ -4,7 +4,7 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
-import org.example.dto.UserAdminPageQueryDTO;
+import org.example.dto.AdminDTO.UserAdminPageQueryDTO;
 import org.example.entity.User;
 import org.example.mapper.UserAdminMapper;
 import org.example.service.UserAdminService;

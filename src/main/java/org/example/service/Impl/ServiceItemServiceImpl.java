@@ -4,14 +4,11 @@ import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
-import org.example.dto.ServiceItemPageQueryDTO;
-import org.example.entity.ServiceCategory;
+import org.example.dto.AdminDTO.ServiceItemPageQueryDTO;
 import org.example.entity.ServiceItem;
-import org.example.mapper.ServiceCategoryMapper;
 import org.example.mapper.ServiceItemMapper;
 import org.example.service.ServiceItemService;
 
-import org.example.vo.ServiceCategoryVO;
 import org.example.vo.ServiceItemVO;
 import org.springframework.beans.BeanUtils;
 import org.springframework.stereotype.Service;

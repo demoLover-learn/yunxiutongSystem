@@ -2,8 +2,7 @@ package org.example.mapper;
 
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
-import org.apache.ibatis.annotations.Select;
-import org.example.dto.OrderManageDTO;
+import org.example.dto.AdminDTO.OrderManageDTO;
 import org.example.entity.ServiceOrder;
 
 @Mapper

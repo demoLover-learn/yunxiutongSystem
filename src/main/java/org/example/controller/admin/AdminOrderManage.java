@@ -3,11 +3,9 @@ package org.example.controller.admin;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
-import org.example.dto.OrderManageDTO;
-import org.example.dto.WorkerAdminPageQueryDTO;
+import org.example.dto.AdminDTO.OrderManageDTO;
 import org.example.entity.ServiceOrder;
 import org.example.service.AdminOrderManageService;
-import org.example.vo.AdminOrderManagerVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;

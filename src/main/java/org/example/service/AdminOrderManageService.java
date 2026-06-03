@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.Result.PageResult;
-import org.example.dto.OrderManageDTO;
+import org.example.dto.AdminDTO.OrderManageDTO;
 
 import org.example.entity.ServiceOrder;
 

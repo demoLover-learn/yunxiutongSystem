@@ -3,10 +3,8 @@ package org.example.controller.admin;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
-import org.example.dto.ServiceItemPageQueryDTO;
-import org.example.entity.ServiceItem;
+import org.example.dto.AdminDTO.ServiceItemPageQueryDTO;
 import org.example.service.ServiceItemService;
-import org.example.vo.ServiceCategoryVO;
 import org.example.vo.ServiceItemVO;
 import org.springframework.web.bind.annotation.*;
 

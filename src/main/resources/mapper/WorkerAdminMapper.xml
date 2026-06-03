@@ -22,7 +22,7 @@
         where id=#{id}
     </update>
     <select id="getWorker" resultType="org.example.entity.Worker"
-            parameterType="org.example.dto.WorkerAdminPageQueryDTO">
+            parameterType="org.example.dto.AdminDTO.WorkerAdminPageQueryDTO">
         select w.*,
                case w.service_status
                 when 0 then '休息中'

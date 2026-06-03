@@ -1,6 +1,6 @@
 package org.example.service;
 
-import org.example.dto.LoginDTO;
+import org.example.dto.AdminDTO.LoginDTO;
 import org.example.entity.Employee;
 
 import javax.security.auth.login.AccountException;

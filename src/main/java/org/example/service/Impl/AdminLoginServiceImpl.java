@@ -1,6 +1,6 @@
 package org.example.service.Impl;
 
-import org.example.dto.LoginDTO;
+import org.example.dto.AdminDTO.LoginDTO;
 import org.example.entity.Employee;
 import org.example.mapper.AdminLoginMapper;
 import org.example.service.AdminLoginService;

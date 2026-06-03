@@ -5,14 +5,12 @@ import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
 
 import org.example.Result.PageResult;
-import org.example.dto.ServiceCategoryDTO;
+import org.example.dto.AdminDTO.ServiceCategoryDTO;
 import org.example.entity.ServiceCategory;
 import org.example.mapper.ServiceCategoryMapper;
-import org.example.mapper.ServiceItemMapper;
 import org.example.service.ServiceCategoryService;
 import org.example.vo.ServiceCategoryVO;
 import org.springframework.beans.BeanUtils;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;

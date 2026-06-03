@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.Result.PageResult;
-import org.example.dto.ServiceCategoryDTO;
+import org.example.dto.AdminDTO.ServiceCategoryDTO;
 import org.example.entity.ServiceCategory;
 import org.example.vo.ServiceCategoryVO;
 

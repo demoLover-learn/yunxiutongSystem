@@ -4,9 +4,8 @@ import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Delete;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.example.dto.ServiceCategoryDTO;
+import org.example.dto.AdminDTO.ServiceCategoryDTO;
 import org.example.entity.ServiceCategory;
-import org.example.vo.ServiceCategoryVO;
 
 import java.util.List;
 

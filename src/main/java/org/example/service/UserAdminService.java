@@ -1,7 +1,7 @@
 package org.example.service;
 
 import org.example.Result.PageResult;
-import org.example.dto.UserAdminPageQueryDTO;
+import org.example.dto.AdminDTO.UserAdminPageQueryDTO;
 
 public interface UserAdminService {
 

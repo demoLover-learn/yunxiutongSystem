@@ -3,7 +3,7 @@ package org.example.controller.admin;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
-import org.example.dto.UserAdminPageQueryDTO;
+import org.example.dto.AdminDTO.UserAdminPageQueryDTO;
 import org.example.service.UserAdminService;
 import org.springframework.web.bind.annotation.*;
 

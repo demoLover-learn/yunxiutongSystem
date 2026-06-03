@@ -3,7 +3,7 @@ package org.example.mapper;
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
-import org.example.dto.UserAdminPageQueryDTO;
+import org.example.dto.AdminDTO.UserAdminPageQueryDTO;
 import org.example.entity.User;
 
 @Mapper

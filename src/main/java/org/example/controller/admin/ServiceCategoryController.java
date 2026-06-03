@@ -3,7 +3,7 @@ package org.example.controller.admin;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
-import org.example.dto.ServiceCategoryDTO;
+import org.example.dto.AdminDTO.ServiceCategoryDTO;
 import org.example.entity.ServiceCategory;
 import org.example.service.ServiceCategoryService;
 import org.example.vo.ServiceCategoryVO;

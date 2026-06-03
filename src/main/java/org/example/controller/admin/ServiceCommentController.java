@@ -1,11 +1,10 @@
 package org.example.controller.admin;
 
 import jakarta.annotation.Resource;
-import lombok.Data;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
-import org.example.dto.ServiceCommentPageQueryDTO;
+import org.example.dto.AdminDTO.ServiceCommentPageQueryDTO;
 import org.example.service.ServiceCommentService;
 import org.springframework.web.bind.annotation.*;
 
