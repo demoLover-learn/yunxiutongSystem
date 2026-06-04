@@ -25,5 +25,9 @@ public class ServiceItemVO {
     //status
     private Integer status;
 
+    //非数据库字段
+ private String categoryName;
+
+
 
 }

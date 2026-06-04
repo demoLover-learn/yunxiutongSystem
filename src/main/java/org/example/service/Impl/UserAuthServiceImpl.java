@@ -31,9 +31,6 @@ public class UserAuthServiceImpl implements UserAuthService {
             throw new RuntimeException("账号不存在，请先注册");
         }
         //存在判断账号密码是否正确
-        if(!(user1.getPhone().equals(userLoginDTO.getUsername()))){
-            throw new RuntimeException("账号或者密码错误");
-        }
         if (user1.getStatus()!=1){
             throw new RuntimeException("账号已被封禁，请联系管理员");
         }
