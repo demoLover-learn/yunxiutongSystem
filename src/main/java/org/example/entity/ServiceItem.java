@@ -34,6 +34,4 @@ public class ServiceItem {
     private LocalDateTime updateTime;
 
 
-
-
 }

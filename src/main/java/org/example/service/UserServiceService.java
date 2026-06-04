@@ -14,11 +14,4 @@ public interface UserServiceService {
      * @return
      */
    List<ServiceItemVO> pageQuery(ServiceItemPageQueryDTO query);
-
-    /**
-     * 查看服务详情信息
-     * @param id
-     * @return
-     */
-    ServiceItemVO getDetail(Long id);
 }

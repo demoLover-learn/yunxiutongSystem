@@ -42,16 +42,5 @@
             </if>
         </where>
     </select>
-    <select id="getByDetailId" resultType="org.example.entity.ServiceItem" parameterType="java.lang.Long">
-        select si.*,
-               sc.name AS categoryName
-        from service_item si
-        left join service_category sc on si.category_id=sc.id
-        <where>
-            si.status=1
-        and si.id=#{id}
-        </where>
-
-    </select>
 
 </mapper>

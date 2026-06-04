@@ -6,7 +6,6 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.dto.AdminDTO.ServiceItemPageQueryDTO;
 import org.example.entity.ServiceItem;
-import org.example.vo.ServiceItemVO;
 
 
 @Mapper
@@ -53,11 +52,4 @@ public interface ServiceItemMapper {
      * @return
      */
     Page<ServiceItem> selectAllowed(ServiceItemPageQueryDTO query);
-
-    /**
-     *  查看服务详情信息
-     * @param id
-     * @return
-     */
-    ServiceItem getByDetailId(Long id);
 }
