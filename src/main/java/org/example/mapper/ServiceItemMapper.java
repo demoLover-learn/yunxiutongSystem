@@ -45,4 +45,11 @@ public interface ServiceItemMapper {
      */
     @Delete("delete from service_item where id=#{id}")
     void deleteById(Long id);
+
+    /**
+     * 用户端分页查询，过滤没被禁用的项目
+     * @param query
+     * @return
+     */
+    Page<ServiceItem> selectAllowed(ServiceItemPageQueryDTO query);
 }

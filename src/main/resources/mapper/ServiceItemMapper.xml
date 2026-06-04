@@ -30,5 +30,17 @@
             </if>
         </where>
     </select>
+    <select id="selectAllowed" resultType="org.example.entity.ServiceItem"
+            parameterType="org.example.dto.AdminDTO.ServiceItemPageQueryDTO">
+        select si.*,sc.name as categoryName
+        from service_item  si
+            left join service_category sc on si.category_id=sc.id
+        <where>
+            si.status=1
+            <if test="categoryId!=null">
+               and si.category_id=#{categoryId}
+            </if>
+        </where>
+    </select>
 
 </mapper>
