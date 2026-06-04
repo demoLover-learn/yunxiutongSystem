@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+<mapper namespace="org.example.mapper.UserAddressMapper">
+    <insert id="insert" parameterType="org.example.entity.UserAddress">
+        insert into user_address(user_id, contact_name, contact_phone, province,
+                                 city, district, detail_address, latitude, longitude,is_default,create_time)
+        VALUES (#{userId},#{contactName},#{contactPhone},#{province},#{city},#{district},#{detailAddress},
+                #{latitude},#{longitude},#{isDefault},#{createTime})
+
+    </insert>
+    <update id="update" parameterType="org.example.entity.UserAddress">
+    update user_address
+    <set>
+        <if test="contactName!=null">contact_name=#{contactName},</if>
+        <if test="contactPhone!=null">contact_phone=#{contactPhone},</if>
+        <if test="province!=null">province=#{province},</if>
+        <if test="city!=null">city=#{city},</if>
+        <if test="district!=null">district=#{district},</if>
+        <if test="detailAddress!=null">detail_address=#{detailAddress},</if>
+        <if test="latitude!=null">latitude=#{latitude},</if>
+        <if test="longitude!=null">longitude=#{longitude},</if>
+        <if test="isDefault!=null">is_default=#{isDefault},</if>
+        <if test="updateTime!=null">update_time=#{updateTime},</if>
+    </set>
+        where
+            id=#{id} and user_id=#{userId}
+    </update>
+
+</mapper>
