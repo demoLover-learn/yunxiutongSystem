@@ -55,5 +55,10 @@ public interface ServiceCategoryMapper {
     @Select("select * from service_category;")
     List<ServiceCategory> getAll();
 
-
+    /**
+     * 查询项目分类的信息
+     * @return
+     */
+    @Select("select * from service_category where  status=1 order by sort")
+    List<ServiceCategory> getEnable();
 }
