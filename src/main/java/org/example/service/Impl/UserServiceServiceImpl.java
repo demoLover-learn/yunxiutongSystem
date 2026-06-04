@@ -43,4 +43,22 @@ public class UserServiceServiceImpl implements UserServiceService {
         }
         return serviceItemVOS;
     }
+
+    /**
+     * 查看服务详情信息
+     * @param id
+     * @return
+     */
+    @Override
+    public ServiceItemVO getDetail(Long id) {
+        //根据id查询对应的服务项目
+       ServiceItem serviceItem= serviceItemMapper.getByDetailId(id);
+        //判断服务项目是否存在
+        if (serviceItem== null ) {
+            //不存在返回错误
+            throw new RuntimeException("服务项目不存在");
+        }
+
+        return vo;
+    }
 }

@@ -26,4 +26,5 @@ public class ServiceItemVO {
     private Integer status;
 
 
+
 }
