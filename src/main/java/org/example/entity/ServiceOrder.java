@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -50,6 +51,8 @@ public class ServiceOrder {
     private LocalDateTime cancelTime;
     //更新时间
     private LocalDateTime updateTime;
+    //支付超时时间
+    private LocalDateTime payExpireTime;
 
     // 非数据库字段，仅用于列表/详情展示
     private String userName;         // 用户昵称

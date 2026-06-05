@@ -2,6 +2,18 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.example.mapper.AdminOrderManageMapper">
+    <insert id="insert" parameterType="org.example.entity.ServiceOrder" useGeneratedKeys="true" keyProperty="id">
+insert into service_order( order_no, user_id, service_item_id, worker_id, address_id,
+                          appointment_time, order_status, pay_status, total_amount, remark, cancel_reason, create_time,
+                          pay_time, receive_time, start_service_time, finish_service_time, cancel_time, update_time,
+                          pay_expire_time) VALUES
+    ( #{orderNo}, #{userId}, #{serviceItemId}, #{workerId}, #{addressId}, #{appointmentTime}, #{status},
+     #{payStatus}, #{totalAmount}, #{remark}, #{cancelReason}, #{createTime}, #{payTime}, #{receiveTime},
+     #{startServiceTime},
+     #{finishServiceTime}, #{cancelTime}, #{updateTime}, #{payExpireTime})
+
+
+    </insert>
     <update id="update" parameterType="org.example.entity.ServiceOrder">
         update service_order
         <set>
@@ -89,5 +101,26 @@
 
 
 
+    </select>
+    <select id="getDataByUserIdAndStatus" resultType="org.example.entity.ServiceOrder">
+        select  so.*,
+                si.name as serviceItemName,
+                so.order_status as status,
+                 case so.order_status
+                 when 0 then '待接单'
+                 when 1 then '已接单'
+                 when 2 then '服务中'
+                 when 3 then '已完成'
+                 when 4 then '已取消'
+                 end as orderStatusName
+        from service_order so
+        left join service_item si on so.service_item_id=si.id
+        <where>
+         user_id=#{userId}
+        <if test="status!=null and status!=''">
+       and  find_in_set(order_status,#{status})
+        </if>
+        </where>
+        order by so.create_time desc
     </select>
 </mapper>

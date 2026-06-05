@@ -52,6 +52,11 @@
         and si.id=#{id}
         </where>
     </select>
+    <select id="getAmountById" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
+        select price
+        from service_item
+        where id=#{id}
+    </select>
 
 
 </mapper>

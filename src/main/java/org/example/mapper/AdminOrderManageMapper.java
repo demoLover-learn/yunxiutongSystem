@@ -27,4 +27,18 @@ public interface AdminOrderManageMapper {
      * @param order
      */
     void update(ServiceOrder order);
+
+    /**
+     * 插入数据库
+     * @param order
+     */
+    void insert(ServiceOrder order);
+
+    /**
+     * 用户端分页查询工单分类
+     * @param userId
+     * @param status
+     * @return
+     */
+    Page<ServiceOrder> getDataByUserIdAndStatus(Long userId, String status);
 }

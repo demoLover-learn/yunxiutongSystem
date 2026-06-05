@@ -8,6 +8,8 @@ import org.example.dto.AdminDTO.ServiceItemPageQueryDTO;
 import org.example.entity.ServiceItem;
 import org.example.vo.ServiceItemVO;
 
+import java.math.BigDecimal;
+
 
 @Mapper
 public interface ServiceItemMapper {
@@ -60,4 +62,11 @@ public interface ServiceItemMapper {
      * @return
      */
     ServiceItem getByDetailId(Long id);
+
+    /**
+     * 查询项目对应的金额
+     * @param serviceItemId
+     * @return
+     */
+    BigDecimal getAmountById(Long serviceItemId);
 }
