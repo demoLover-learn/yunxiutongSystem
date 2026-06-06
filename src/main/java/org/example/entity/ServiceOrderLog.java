@@ -1,12 +1,14 @@
 package org.example.entity;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.time.LocalDateTime;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 //工单日志表
@@ -16,7 +18,7 @@ public class ServiceOrderLog {
     //工单id
     private Long orderId;
     //操作人类型,user/worker/admin/system
-    private Long operatorType;
+    private String operatorType;
     //操作人id
     private Long operatorId;
     //原状态

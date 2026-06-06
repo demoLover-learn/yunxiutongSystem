@@ -12,6 +12,7 @@ import org.example.entity.ServiceOrderComment;
 import org.example.mapper.AdminOrderManageMapper;
 import org.example.mapper.ServiceItemMapper;
 import org.example.mapper.UserOrderCommentMapper;
+import org.example.service.OrderStatusService;
 import org.example.service.UserOrderService;
 import org.example.vo.UserOrderVO;
 import org.springframework.beans.BeanUtils;
@@ -31,6 +32,8 @@ public class UserOrderServiceImpl implements UserOrderService {
     private ServiceItemMapper serviceItemMapper;
     @Resource
     private AdminOrderManageMapper adminOrderManageMapper;
+    @Resource
+    private OrderStatusService orderStatusService;
 
     /**
      * 确认订单
@@ -145,21 +148,12 @@ public class UserOrderServiceImpl implements UserOrderService {
             //不存在抛出错误
             throw new RuntimeException("订单不存在");
         }
-        //判断是不是当前用户自己的订单
         if(!order.getUserId().equals(userId)){
-            //不是的话抛出错误
             throw new RuntimeException("无权操作此订单");
         }
-        if(order.getStatus()!=0){
-            throw new RuntimeException("订单状态不支持取消");
-        }
-        //设置取消原因，取消时间,订单状态
         order.setCancelReason("用户主动取消");
-        order.setStatus(4);
-        order.setUpdateTime(LocalDateTime.now());
-        order.setCancelTime(LocalDateTime.now());
-        //更新数据库
-        adminOrderManageMapper.update(order);
+        //调用状态机更改对应的数据以及更新日志
+        orderStatusService.transition(order,4,"user",userId,"用户取消");
     }
     /**
      * 工单分页查询
