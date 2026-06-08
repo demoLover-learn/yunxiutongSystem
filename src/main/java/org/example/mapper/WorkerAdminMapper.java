@@ -39,7 +39,24 @@ public interface WorkerAdminMapper {
     @Select("select * from worker where status=1 and service_status=1")
     List<Worker> selectWorker();
 
+    /**
+     * 根据工人id查询工人是否存在
+     * @param username
+     * @return
+     */
+    @Select("select * from worker where phone=#{username}")
+    Worker getByWorkerPhone(String username);
 
+    /**
+     * 工人插入
+     * @param worker1
+     */
+    void insert(Worker worker1);
 
-
+    /**
+     * 统计查询当日订单和总订单数
+     * @param workerId
+     * @return
+     */
+    Worker getMoreByWorkerId(Long workerId);
 }

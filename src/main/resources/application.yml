@@ -46,4 +46,7 @@ yxt:
     user-secret-key: yxt-zhangjuntongxue-haojiubujian-nihaihaoma
     user-token-name: token
     user-ttl: 72000000
+    worker-secret-key: yxt-woshogongrenduande-woxihuankanhua
+    worker-ttl: 72000000
+    worker-token-name: token
 

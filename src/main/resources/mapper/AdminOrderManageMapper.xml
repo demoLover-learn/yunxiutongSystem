@@ -86,7 +86,9 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
                  when 2 then '服务中'
                  when 3 then '已完成'
                  when 4 then '已取消'
-                end as orderStatusName
+                end as orderStatusName,
+            round(st_distance_sphere(point(ua.longitude,ua.latitude)
+        ,point(w.longitude,w.latitude))/1000) as distance
         from service_order so
         inner join user u on so.user_id=u.id
         inner join service_item si on so.service_item_id=si.id
@@ -122,5 +124,21 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
         </if>
         </where>
         order by so.create_time desc
+    </select>
+    <select id="getPendingOrder" resultType="org.example.entity.ServiceOrder">
+        select so.id,
+               so.total_amount,
+            so.appointment_time,
+               so.remark,
+               concat(ud.province,ud.city,ud.district,ud.detail_address) as address,
+               si.name as serviceItemName,
+              round(st_distance_sphere(point(w.longitude,w.latitude),
+                    point(ud.longitude,ud.latitude))/1000) as distance
+        from service_order so
+        left join user_address ud on so.address_id=ud.id
+        left join service_item si on so.service_item_id=si.id
+        left join worker w on w.id=#{workerId}
+        where
+            so.order_status=0
     </select>
 </mapper>

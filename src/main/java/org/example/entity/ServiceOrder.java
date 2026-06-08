@@ -61,5 +61,6 @@ public class ServiceOrder {
     private String workerName;       // 师傅姓名
     private String address;          // 拼接后的完整地址
     private String orderStatusName;  // 状态中文名
+    private Integer distance;
 
 }

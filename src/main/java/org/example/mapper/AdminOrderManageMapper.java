@@ -5,6 +5,8 @@ import org.apache.ibatis.annotations.Mapper;
 import org.example.dto.AdminDTO.OrderManageDTO;
 import org.example.entity.ServiceOrder;
 
+import java.util.List;
+
 @Mapper
 public interface AdminOrderManageMapper {
 
@@ -41,4 +43,10 @@ public interface AdminOrderManageMapper {
      * @return
      */
     Page<ServiceOrder> getDataByUserIdAndStatus(Long userId, String status);
+
+    /**
+     * 待接单状态查询
+     * @return
+     */
+    List<ServiceOrder> getPendingOrder(Long workerId);
 }

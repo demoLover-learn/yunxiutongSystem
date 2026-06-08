@@ -2,6 +2,12 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.example.mapper.WorkerAdminMapper">
+    <insert id="insert" parameterType="org.example.entity.Worker">
+        insert into worker(name, phone, password, gender, skill_desc, service_status,
+                           latitude, longitude, rating, status, create_time, update_time) VALUES
+          (#{name},#{phone},#{password},#{gender},#{skillDesc},#{serviceStatus},#{latitude}
+          ,#{longitude},#{rating},#{status},#{createTime},#{updateTime})
+    </insert>
 
     <!--更新工人数据库信息-->
     <update id="updateWorker" parameterType="org.example.entity.Worker">
@@ -10,6 +16,7 @@
             <if test="name!=null">name=#{name},</if>
             <if test="phone!=null">phone=#{phone},</if>
             <if test="gender!=null">gender=#{gender},</if>
+            <if test="avatar!=null">avatar=#{avatar},</if>
             <if test="skillDesc!=null">skill_desc=#{skillDesc},</if>
             <if test="serviceStatus!=null">service_status=#{serviceStatus},</if>
             <if test="latitude!=null">latitude=#{latitude},</if>
@@ -39,6 +46,16 @@
                 and status=#{status}
             </if>
         </where>
+    </select>
+    <select id="getMoreByWorkerId" resultType="org.example.entity.Worker" parameterType="java.lang.Long">
+        select w.*,
+              (select count(*) from service_order
+               where worker_id=w.id and order_status=3) as totalCompleted,
+               (select count(*) from service_order
+                where worker_id=w.id and order_status=3
+        and DATE(finish_service_time) = CURDATE()) as todayCompleted
+        from worker w
+        where w.id=#{workerId}
     </select>
 
 </mapper>

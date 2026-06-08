@@ -46,4 +46,11 @@ public class Worker {
     private Integer orderCount;
 
 
+    //非数据库字段
+    //当日订单量
+    private Integer todayCompleted;
+    //总完成订单量
+    private Integer totalCompleted;
+
+
 }

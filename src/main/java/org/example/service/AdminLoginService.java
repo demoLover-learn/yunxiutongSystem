@@ -2,6 +2,7 @@ package org.example.service;
 
 import org.example.dto.AdminDTO.LoginDTO;
 import org.example.entity.Employee;
+import org.example.entity.Worker;
 
 import javax.security.auth.login.AccountException;
 
@@ -12,11 +13,6 @@ public interface AdminLoginService {
      * @param loginDTO
      */
     Employee login(LoginDTO loginDTO) throws AccountException;
-
-
-
-
-
 
 
 
