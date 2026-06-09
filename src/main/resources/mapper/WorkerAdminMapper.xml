@@ -3,7 +3,7 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.example.mapper.WorkerAdminMapper">
     <insert id="insert" parameterType="org.example.entity.Worker">
-        insert into worker(name, phone, password, gender, skill_desc, service_status,
+            insert into worker(name, phone, password, gender, skill_desc, service_status,
                            latitude, longitude, rating, status, create_time, update_time) VALUES
           (#{name},#{phone},#{password},#{gender},#{skillDesc},#{serviceStatus},#{latitude}
           ,#{longitude},#{rating},#{status},#{createTime},#{updateTime})

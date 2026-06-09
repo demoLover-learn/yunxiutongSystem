@@ -2,8 +2,10 @@ package org.example.mapper;
 
 import com.github.pagehelper.Page;
 import org.apache.ibatis.annotations.Mapper;
+import org.apache.ibatis.annotations.Select;
 import org.example.dto.AdminDTO.OrderManageDTO;
 import org.example.entity.ServiceOrder;
+import org.example.vo.WorkerBenchVO;
 
 import java.util.List;
 
@@ -49,4 +51,27 @@ public interface AdminOrderManageMapper {
      * @return
      */
     List<ServiceOrder> getPendingOrder(Long workerId);
+
+    /**
+     * 工人端根据用户名和状态查询详细信息
+     * @param workerId
+     * @param status
+     * @return
+     */
+    List<ServiceOrder> getDataByWorkerIdAndStatus(Long workerId, Integer status);
+
+    /**
+     * 工作台展示
+     * @param workerId
+     * @return
+     */
+   WorkerBenchVO getbench(Long workerId);
+
+    /**
+     * 查询待处理的订单
+     * @param workerId
+     * @return
+     */
+
+    List<ServiceOrder> getServiceByWorkerId(Long workerId);
 }

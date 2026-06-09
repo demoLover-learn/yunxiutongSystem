@@ -141,4 +141,60 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
         where
             so.order_status=0
     </select>
+    <select id="getDataByWorkerIdAndStatus" resultType="org.example.entity.ServiceOrder">
+        select so.*,
+               u.nickname as userName,
+               u.phone as userPhone,
+                so.order_status as status,
+              case so.order_status
+                when 0 then '待接单'
+                when 1 then '已接单'
+                when 2 then '服务中'
+                when 3 then '已完成'
+                when 4 then '已取消'
+                end as orderStatusName,
+              concat(ad.province,ad.city,ad.district,ad.detail_address) as address,
+              si.name as serviceItemName
+        from service_order so
+        left join user u on so.user_id=u.id
+        left join user_address ad on so.address_id=ad.id
+        left join service_item si on so.service_item_id=si.id
+        <where>
+            so.worker_id=#{workerId}
+        <if test="status!=null">
+            and so.order_status=#{status}
+        </if>
+        </where>
+        order by so.create_time desc
+    </select>
+    <select id="getbench" resultType="org.example.vo.WorkerBenchVO" parameterType="java.lang.Long">
+        select count(case when order_status=0 then 1 end) as todayPending,
+               count(case when order_status=2 then 1 end) as todayServing,
+               count(case when order_status=3 and DATE(finish_service_time)=CURDATE() then 1 end) as todayDone
+            from service_order
+        where worker_id=#{workerId}
+    </select>
+    <select id="getServiceByWorkerId" resultType="org.example.entity.ServiceOrder"
+            parameterType="java.lang.Long">
+        select so.id,
+               so.order_status as status,
+               so.appointment_time as appointmentTime,
+               si.name as serviceItemName,
+               u.nickname as userName,
+               concat(ad.province, ad.city, ad.district, ad.detail_address) as address,
+               case so.order_status
+                   when 1 then '已接单'
+                   when 2 then '服务中'
+                   when 3 then '已完成'
+                   when 4 then '已取消'
+                   end as orderStatusName
+        from service_order so
+                 left join user u on so.user_id = u.id
+                 left join service_item si on so.service_item_id = si.id
+                 left join user_address ad on so.address_id = ad.id
+        where so.worker_id = #{workerId}
+          and so.order_status in (1, 2)
+        order by so.create_time desc
+    </select>
+
 </mapper>
