@@ -58,19 +58,24 @@ public class WorkerPendingServiceImpl implements WorkerPendingService {
         }
         //把查询到的订单封装到VO
        return WorkerDetailVO.builder()
+                .id(id)
                 .address(order.getAddress())
                 .appointmentTime(order.getAppointmentTime())
                 .remark(order.getRemark())
-               .orderNo(order.getOrderNo())
+                .orderNo(order.getOrderNo())
                 .distance(order.getDistance())
                 .serviceItemName(order.getServiceItemName())
                 .totalAmount(order.getTotalAmount())
-                .id(id)
-               .orderStatus(order.getStatus())
-               .orderStatusName(order.getOrderStatusName())
-               .userPhone(order.getUserPhone())
-               .userName(order.getUserName())
-               .createTime(order.getCreateTime())
+                .cancelTime(order.getCancelTime())
+                .cancelReason(order.getCancelReason())
+                .receiveTime(order.getReceiveTime())
+                .startServiceTime(order.getStartServiceTime())
+                .finishServiceTime(order.getFinishServiceTime())
+                .orderStatus(order.getStatus())
+                .orderStatusName(order.getOrderStatusName())
+                .userPhone(order.getUserPhone())
+                .userName(order.getUserName())
+                .createTime(order.getCreateTime())
                 .build();
     }
 }

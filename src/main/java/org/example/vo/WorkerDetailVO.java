@@ -40,6 +40,12 @@ public class WorkerDetailVO {
     private Integer orderStatus;
     private String orderStatusName;
 
+    private LocalDateTime receiveTime;
+
+    private LocalDateTime startServiceTime;
+    private LocalDateTime finishServiceTime;
+    private LocalDateTime cancelTime;
+    private String cancelReason;
 
 
 }
