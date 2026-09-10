@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class UserLoginDTO {
     //账号
-    private String username;
+    private String phone;
     //密码
     private String password;
 

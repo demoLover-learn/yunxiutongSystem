@@ -6,12 +6,7 @@ import org.example.entity.User;
 
 @Mapper
 public interface UserAuthMapper {
-    /**
-     * 用户登陆
-     * @param username
-     * @return
-     */
-    User getUser(String username);
+
 
     /**
      * 根据电话号码查询对象

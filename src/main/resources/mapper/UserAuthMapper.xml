@@ -22,8 +22,5 @@
             id=#{id}
         </where>
     </update>
-    <select id="getUser" resultType="org.example.entity.User" parameterType="org.example.entity.User">
-    select * from user
-    where phone=#{phone}
-    </select>
+
 </mapper>

@@ -24,7 +24,7 @@ public class UserAuthServiceImpl implements UserAuthService {
     @Override
     public User userLogin(UserLoginDTO userLoginDTO) {
         //验证用户是否存在
-        User user1= userAuthMapper.getUser(userLoginDTO.getUsername());
+            User user1= userAuthMapper.getByPhone(userLoginDTO.getPhone());
         //判断账号是否存在
         if (user1==null ){
             //不存在返回错误
