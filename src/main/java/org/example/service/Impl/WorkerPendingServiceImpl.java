@@ -49,6 +49,7 @@ public class WorkerPendingServiceImpl implements WorkerPendingService {
      */
     @Override
     public WorkerDetailVO orderDetail(Long id) {
+        Long workerId = BaseContext.getCurrentId();
         //根据id查询订单
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         //判断订单是否存在
@@ -56,6 +57,12 @@ public class WorkerPendingServiceImpl implements WorkerPendingService {
             //不存在抛异常
             throw new RuntimeException("工单不存在");
         }
+        // ② 已被别人接走的单不能看；待接单（workerId 为空）允许查看
+        if (order.getWorkerId() != null && !order.getWorkerId().equals(workerId)) {
+            throw new RuntimeException("无权查看此订单");
+        }
+        // ③ 判断这单是不是自己接的（用来决定要不要给手机号）
+        boolean isMine = workerId.equals(order.getWorkerId());
         //把查询到的订单封装到VO
        return WorkerDetailVO.builder()
                 .id(id)
@@ -73,8 +80,8 @@ public class WorkerPendingServiceImpl implements WorkerPendingService {
                 .finishServiceTime(order.getFinishServiceTime())
                 .orderStatus(order.getStatus())
                 .orderStatusName(order.getOrderStatusName())
-                .userPhone(order.getUserPhone())
-                .userName(order.getUserName())
+                .userPhone(isMine?order.getUserPhone():null)
+                .userName(isMine?order.getUserName():null)
                 .createTime(order.getCreateTime())
                 .build();
     }

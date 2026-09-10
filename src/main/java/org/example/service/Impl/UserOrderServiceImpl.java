@@ -75,11 +75,15 @@ public class UserOrderServiceImpl implements UserOrderService {
      */
     @Override
     public UserOrderVO getOrderDetail(Long id) {
+        Long userId = BaseContext.getCurrentId();
         //根据工单id查询工单
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         if (order == null) {
             //判断工单是否存在
             throw new RuntimeException("工单不存在");
+        }
+        if(!order.getUserId().equals(userId)) {
+            throw new RuntimeException("无权查看此订单");
         }
         //封装返回
         UserOrderVO orderVO = UserOrderVO.builder()
