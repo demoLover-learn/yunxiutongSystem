@@ -1,6 +1,8 @@
 package org.example.controller.user;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.Result;
@@ -24,7 +26,7 @@ import java.util.Map;
 import java.util.concurrent.TimeUnit;
 
 @RestController
-
+@Tag(name="用户端登陆管理")
 @RequestMapping("/api/user")
 @Slf4j
 public class UserAuthController {
@@ -41,6 +43,7 @@ public class UserAuthController {
      * @param userLoginDTO
      * @return
      */
+    @Operation(summary = "用户登陆")
     @PostMapping("/login")
     public Result<UserLoginVO> userLogin(@RequestBody UserLoginDTO userLoginDTO) {
         User user= userAuthService.userLogin(userLoginDTO);
@@ -74,6 +77,7 @@ public class UserAuthController {
      * @param userRegisterDTO
      * @return
      */
+    @Operation(summary = "用户注册")
     @PostMapping("/register")
     public Result userRegister(@RequestBody UserRegisterDTO userRegisterDTO) {
         userAuthService.userRegister(userRegisterDTO);
@@ -84,6 +88,7 @@ public class UserAuthController {
      * 用户退出
      * @return
      */
+    @Operation(summary = "用户退出")
     @PostMapping("/logout")
     public Result logout() {
         Long userId = BaseContext.getCurrentId();

@@ -1,6 +1,8 @@
 package org.example.controller.user;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.PageResult;
@@ -12,7 +14,7 @@ import org.example.vo.UserOrderVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Tag(name="用户端订单相关接口")
 @RestController
 @RequestMapping("/api/user")
 @Slf4j
@@ -27,6 +29,7 @@ public class UserOrderController {
      * @param userOrderDTO
      * @return
      */
+    @Operation(summary = "确认订单")
     @PostMapping("/orders")
     public Result<Long> confirmOrder(@RequestBody UserOrderDTO userOrderDTO) {
         Long orderId=userOrderService.ConfirmOrder(userOrderDTO);
@@ -38,6 +41,7 @@ public class UserOrderController {
      * @param id
      * @return
      */
+    @Operation(summary = "查询工单详情")
     @GetMapping("/orders/{id}")
     public Result<UserOrderVO> orderDetail(@PathVariable Long id){
         UserOrderVO vo=userOrderService.getOrderDetail(id);
@@ -49,6 +53,7 @@ public class UserOrderController {
      * @param id
      * @return
      */
+    @Operation(summary = "订单模拟支付")
     @PutMapping("/orders/{id}/pay")
     public Result<String> payment(@PathVariable Long id){
         userOrderService.payment(id);
@@ -60,6 +65,7 @@ public class UserOrderController {
      * @param id
      * @return
      */
+    @Operation(summary = "取消订单")
     @PutMapping("/orders/{id}/cancel")
     public Result cancelOrder(@PathVariable Long id){
         userOrderService.cancelOrder(id);
@@ -71,6 +77,7 @@ public class UserOrderController {
      * @param userOrderDTO
      * @return
      */
+    @Operation(summary = "订单分页查询")
     @GetMapping("/orders")
     public Result<PageResult> orderList(UserOrderDTO userOrderDTO){
         PageResult pageResult=userOrderService.pageQuery(userOrderDTO);
@@ -83,6 +90,7 @@ public class UserOrderController {
      * @param userCommentDTO
      * @return
      */
+    @Operation(summary = "用户评价")
     @PostMapping("/orders/{id}/comment")
     public Result<String> orderComment(@PathVariable Long id,
                                        @RequestBody UserCommentDTO userCommentDTO){

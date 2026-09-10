@@ -1,6 +1,8 @@
 package org.example.controller.common;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.Result;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -12,13 +14,14 @@ import org.springframework.web.multipart.MultipartFile;
 import java.io.File;
 import java.io.IOException;
 import java.util.UUID;
-
+@Tag(name="文件上传")
 @RestController
 @RequestMapping("/api/common")
 @Slf4j
 public class UploadController {
     private final static  String LOCAL_PATH="E:\\AAADeepSeek\\image";
 
+    @Operation(summary = "文件上传")
     @PostMapping("/upload")
     public Result<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
     //生成唯一文件名称

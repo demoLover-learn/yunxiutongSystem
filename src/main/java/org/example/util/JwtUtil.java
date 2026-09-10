@@ -9,10 +9,7 @@ import java.util.Date;
 import java.util.Map;
 
 public class JwtUtil {
-
-
-
-//token解密
+    //token解密
     public static Claims parseJWT(String secretKey, String token){
         SecretKey key = Keys.hmacShaKeyFor(secretKey.getBytes(StandardCharsets.UTF_8));
         return Jwts.parser()
@@ -21,7 +18,6 @@ public class JwtUtil {
                 .parseClaimsJws(token)
                 .getBody();
     }
-
     /**
      * 生成jwt令牌
      * @param claims

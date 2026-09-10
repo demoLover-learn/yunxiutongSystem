@@ -33,7 +33,7 @@ public class StaticsServiceImpl implements StaticsService {
         VO.forEach(orderCountVO -> {
             months.add(orderCountVO.getMonth());
             counts.add(orderCountVO.getCounts());
-            map.put("month",months);
+            map.put("months",months);
             map.put("counts",counts);
         });
         return map;

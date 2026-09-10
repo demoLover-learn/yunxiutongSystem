@@ -1,6 +1,8 @@
 package org.example.controller.user;
 
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.Result;
@@ -13,7 +15,7 @@ import org.example.vo.UserAddressVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Tag(name="用户端地址管理")
 @RestController
 @RequestMapping("/api/user")
 @Slf4j
@@ -26,6 +28,7 @@ public class UserAddressController {
      * 查看当前用户地址
      * @return
      */
+    @Operation(summary = "查看用户地址")
     @GetMapping("/addresses")
     public Result<List<UserAddressVO>> getAddress(){
         //获取当前登陆用户id
@@ -39,6 +42,7 @@ public class UserAddressController {
      * @param userAddressDTO
      * @return
      */
+    @Operation(summary = "新增地址")
     @PostMapping("/addresses")
     public Result insertAddress(@RequestBody UserAddressDTO userAddressDTO){
         userAddressService.insert(userAddressDTO);
@@ -52,6 +56,7 @@ public class UserAddressController {
      * @param id
      * @return
      */
+    @Operation(summary = "更新地址信息")
     @PutMapping("/addresses/{id}")
     public Result updateAddress(@PathVariable Long id,
                                 @RequestBody UserAddressDTO userAddressDTO){
@@ -64,6 +69,7 @@ public class UserAddressController {
      * @param id
      * @return
      */
+    @Operation(summary = "删除地址信息")
     @DeleteMapping("/addresses/{id}")
     public Result deleteAddress(@PathVariable Long id){
         userAddressService.deleteAddress(id);

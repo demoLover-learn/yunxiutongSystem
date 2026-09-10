@@ -74,4 +74,8 @@ public interface AdminOrderManageMapper {
      */
 
     List<ServiceOrder> getServiceByWorkerId(Long workerId);
+
+
+    @Select("select *, order_status as status from service_order where order_status = 0 and pay_status = 0 and pay_expire_time < now() limit 500")
+    List<ServiceOrder> getTimeoutOrders();
 }

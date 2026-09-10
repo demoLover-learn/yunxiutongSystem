@@ -168,7 +168,7 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
         order by so.create_time desc
     </select>
     <select id="getbench" resultType="org.example.vo.WorkerBenchVO" parameterType="java.lang.Long">
-        select count(case when order_status=0 then 1 end) as todayPending,
+        select count(case when order_status=1 then 1 end) as todayPending,
                count(case when order_status=2 then 1 end) as todayServing,
                count(case when order_status=3 and DATE(finish_service_time)=CURDATE() then 1 end) as todayDone
             from service_order

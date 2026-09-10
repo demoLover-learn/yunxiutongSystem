@@ -1,5 +1,7 @@
 package org.example.controller.worker;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.Result;
@@ -9,7 +11,7 @@ import org.example.vo.WorkerDetailVO;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-
+@Tag(name="工人端服务接口")
 @RestController
 @RequestMapping("/api/worker")
 @Slf4j
@@ -23,6 +25,7 @@ public class WorkerOrderController {
      * @param vo
      * @return
      */
+    @Operation(summary = "工单查询")
     @GetMapping("/orders")
     public Result<List<WorkerDetailVO>> orderList(WorkerOrderDTO vo){
       List<WorkerDetailVO> workerDetailVOS=workerOrderService.orderList(vo);
@@ -34,6 +37,7 @@ public class WorkerOrderController {
      * @param id
      * @return
      */
+    @Operation(summary = "开始服务")
     @PutMapping("/orders/{id}/start")
     public Result startServer(@PathVariable Long id){
         workerOrderService.startServer(id);
@@ -45,6 +49,7 @@ public class WorkerOrderController {
      * @param id
      * @return
      */
+    @Operation(summary = "完成服务")
     @PutMapping("/orders/{id}/complete")
     public Result completeOrder(@PathVariable Long id){
         workerOrderService.completeOrder(id);

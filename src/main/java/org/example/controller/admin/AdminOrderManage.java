@@ -1,5 +1,7 @@
 package org.example.controller.admin;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import org.example.Result.PageResult;
 import org.example.Result.Result;
@@ -9,7 +11,7 @@ import org.example.service.AdminOrderManageService;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.Map;
-
+@Tag(name = "管理端工单管理")
 @RestController
 @RequestMapping("/api/admin")
 public class AdminOrderManage {
@@ -21,6 +23,7 @@ public class AdminOrderManage {
      * @param orderManageDTO
      * @return
      */
+    @Operation(summary = "工单管理分页查询")
     @GetMapping("/orders")
     public Result<PageResult> pageQuery(OrderManageDTO orderManageDTO) {
        PageResult result= adminOrderManageService.pageQuery(orderManageDTO);
@@ -32,6 +35,7 @@ public class AdminOrderManage {
      * @param id
      * @return
      */
+    @Operation(summary = "订单详细信息")
     @GetMapping("/orders/{id}")
         public Result<ServiceOrder> OrderDetail(@PathVariable Long id){
       ServiceOrder serviceOrder= adminOrderManageService.getOrderDetailById(id);
@@ -42,6 +46,7 @@ public class AdminOrderManage {
      * @param id
      * @return
      */
+    @Operation(summary = "派单接口")
     @PutMapping("/orders/{id}/assign")
     public Result deliveryOrder(@PathVariable Long id,@RequestBody Map<String,Long> body) {
        adminOrderManageService.getOrder(id,body.get("workerId"));
@@ -53,6 +58,7 @@ public class AdminOrderManage {
      * @param id
      * @return
      */
+    @Operation(summary = "取消订单")
     @PutMapping("/orders/{id}/cancel")
     public Result cancelOrder(@PathVariable Long id){
         adminOrderManageService.cancelOrder(id);

@@ -1,7 +1,6 @@
 package org.example.service.Impl;
 
 import jakarta.annotation.Resource;
-import org.apache.ibatis.annotations.Mapper;
 import org.example.context.BaseContext;
 import org.example.entity.ServiceOrder;
 import org.example.entity.Worker;
@@ -46,7 +45,7 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
         if (worker.getStatus()==0){
             throw new RuntimeException("封禁账号无法操作");
         }
-        RedisLock redisLock=new RedisLockImpl("lock:order:"+id,stringRedisTemplate);
+        RedisLock redisLock=new RedisLockImpl("order:"+id,stringRedisTemplate);
         //使用乐观锁抢单
         try{
             boolean b = redisLock.tryLock(10L);

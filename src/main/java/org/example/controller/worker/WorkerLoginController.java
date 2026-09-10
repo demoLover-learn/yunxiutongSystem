@@ -1,5 +1,7 @@
 package org.example.controller.worker;
 
+import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import jakarta.annotation.Resource;
 import lombok.extern.slf4j.Slf4j;
 import org.example.Result.Result;
@@ -21,7 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.concurrent.TimeUnit;
-
+@Tag(name="工人端登陆")
 @RestController
 @RequestMapping("/api/worker")
 @Slf4j
@@ -38,6 +40,7 @@ public class WorkerLoginController {
      * @param workerLoginDTO
      * @return
      */
+    @Operation(summary = "工人登录")
     @PostMapping("/login")
     public Result<WorkerLoginVO> workerLogin(@RequestBody WorkerLoginDTO workerLoginDTO) {
            Worker worker= workerLoginService.login(workerLoginDTO);
@@ -69,6 +72,7 @@ public class WorkerLoginController {
      * @param workerRegisterDTO
      * @return
      */
+    @Operation(summary = "工人注册")
     @PostMapping("/register")
     public Result<String> register(@RequestBody WorkerRegisterDTO workerRegisterDTO) {
         workerLoginService.register(workerRegisterDTO);
@@ -79,6 +83,7 @@ public class WorkerLoginController {
      *工人退出
      * @return
      */
+    @Operation(summary = "工人退出")
     @PostMapping("/logout")
     public Result logout() {
         Long workerId = BaseContext.getCurrentId();
