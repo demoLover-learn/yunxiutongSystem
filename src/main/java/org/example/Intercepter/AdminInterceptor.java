@@ -8,18 +8,21 @@ import org.example.context.BaseContext;
 import org.example.properties.JwtProperties;
 import org.example.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerInterceptor;
 
 import javax.crypto.SecretKey;
 import java.nio.charset.StandardCharsets;
+import java.util.concurrent.TimeUnit;
 
 @Component
 public class AdminInterceptor implements HandlerInterceptor {
     @Autowired
     private JwtProperties jwtProperties;
-
+    @Autowired
+    private StringRedisTemplate stringRedisTemplate;
     /**
      * 校验jwt
      * @param request
@@ -37,13 +40,18 @@ public class AdminInterceptor implements HandlerInterceptor {
         }
         //从请求头中获得令牌
         String token = request.getHeader("token");
-
         //校验令牌
        try{//parseJwt不只是解密，而是解密加自动校验一块完成的，如果不抛异常表示校验通过
            //抛异常表示有错误
            Claims claims = JwtUtil.parseJWT(jwtProperties.getAdminSecretKey(), token);
            //获取当前用户id
            Long empId =((Number) claims.get("empId")).longValue();
+           String redisToken = stringRedisTemplate.opsForValue().get("login:admin:" + empId);
+
+           if (redisToken == null || !redisToken.equals(token)) {
+               throw new RuntimeException("登录已失效，请重新登录");
+           }
+           stringRedisTemplate.expire("login:admin:" + empId, 2, TimeUnit.HOURS);
            BaseContext.setCurrentId(empId);
            return true;
        }catch (Exception e){
@@ -52,7 +60,6 @@ public class AdminInterceptor implements HandlerInterceptor {
            return false;
        }
     }
-
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         BaseContext.removeCurrentId();
