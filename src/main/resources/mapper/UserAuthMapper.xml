@@ -17,6 +17,8 @@
             <if test="avatar!=null">avatar=#{avatar},</if>
             <if test="status!=null">status=#{status},</if>
             <if test="updateTime!=null">update_time=#{updateTime},</if>
+            <if
+                    test="password!=null">password=#{password},</if>
         </set>
         <where>
             id=#{id}

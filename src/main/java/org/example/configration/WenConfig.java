@@ -2,6 +2,7 @@ package org.example.configration;
 
 import jakarta.annotation.Resource;
 import org.example.Intercepter.AdminInterceptor;
+import org.example.Intercepter.CommonInterceptor;
 import org.example.Intercepter.UserInterceptor;
 import org.example.Intercepter.WorkerInterceptor;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,8 @@ public class WenConfig implements WebMvcConfigurer {
     private UserInterceptor userInterceptor;
     @Resource
     private WorkerInterceptor  workerInterceptor;
+    @Resource
+    private CommonInterceptor commonInterceptor;
 
 
     @Override
@@ -38,6 +41,8 @@ public class WenConfig implements WebMvcConfigurer {
                 .addPathPatterns("/api/worker/**")
                 //放行登录接口和注册接口
                 .excludePathPatterns("/api/worker/login","/api/worker/register");
+        registry.addInterceptor(commonInterceptor)
+                .addPathPatterns("/api/common/**");
     }
 
     //加载图片的静态资源映射

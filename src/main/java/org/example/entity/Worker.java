@@ -1,5 +1,6 @@
 package org.example.entity;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -20,6 +21,7 @@ public class Worker {
     //手机号
     private String phone;
     //密码
+    @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     private String password;
     //性别：1男 2女
     private String gender;

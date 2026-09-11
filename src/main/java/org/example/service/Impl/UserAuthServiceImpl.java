@@ -7,6 +7,9 @@ import org.example.entity.User;
 import org.example.mapper.UserAuthMapper;
 import org.example.service.UserAuthService;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.annotation.AccessType;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
@@ -16,6 +19,8 @@ public class UserAuthServiceImpl implements UserAuthService {
 
     @Resource
     private UserAuthMapper userAuthMapper;
+    @Resource
+    private BCryptPasswordEncoder bCryptPasswordEncoder;
     /**
      * 用户登陆
      * @param userLoginDTO
@@ -34,8 +39,20 @@ public class UserAuthServiceImpl implements UserAuthService {
         if (user1.getStatus()!=1){
             throw new RuntimeException("账号已被封禁，请联系管理员");
         }
-        if(!(user1.getPassword().equals(userLoginDTO.getPassword()))){
-            throw new RuntimeException("账号或者密码错误");
+        //验证密码是否错误
+        String stored = user1.getPassword();
+        if (stored.startsWith("$2a$")) {
+            // 已是 BCrypt 密文，直接比对
+            if (!bCryptPasswordEncoder.matches(userLoginDTO.getPassword(), stored)) {
+                throw new RuntimeException("账号或者密码错误");
+            }
+        } else {
+            // 历史明文密码：先明文比对，通过则顺手升级为 BCrypt
+            if (!stored.equals(userLoginDTO.getPassword())) {
+                throw new RuntimeException("账号或者密码错误");
+            }
+            user1.setPassword(bCryptPasswordEncoder.encode(userLoginDTO.getPassword()));
+            userAuthMapper.update(user1);
         }
         //正确的话返回用户信息
         return user1;
@@ -49,6 +66,9 @@ public class UserAuthServiceImpl implements UserAuthService {
     public void userRegister(UserRegisterDTO userRegisterDTO) {
         //新建实体类把属性拷贝过来
         User user = new User();
+        if (userRegisterDTO==null){
+            throw new RuntimeException("请输入有效信息");
+        }
         BeanUtils.copyProperties(userRegisterDTO, user);
         user.setCreateTime(LocalDateTime.now());
         user.setStatus(1);
@@ -57,6 +77,8 @@ public class UserAuthServiceImpl implements UserAuthService {
         if (user1!=null){
             throw new RuntimeException("账号已存在，请直接登陆");
         }
+        //密码加密
+        user.setPassword(bCryptPasswordEncoder.encode(userRegisterDTO.getPassword()));
         //保存到数据库
         userAuthMapper.save(user);
 

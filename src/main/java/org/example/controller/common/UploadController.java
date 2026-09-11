@@ -13,6 +13,7 @@ import org.springframework.web.multipart.MultipartFile;
 
 import java.io.File;
 import java.io.IOException;
+import java.util.Set;
 import java.util.UUID;
 @Tag(name="文件上传")
 @RestController
@@ -26,8 +27,19 @@ public class UploadController {
     public Result<String> upload(@RequestParam("file") MultipartFile file) throws IOException {
     //生成唯一文件名称
         String originalFilename = file.getOriginalFilename();
+        if (originalFilename == null || !originalFilename.contains(".")) {
+            throw new RuntimeException("文件类型不支持");
+        }
         //拿到最后一个小数点后边的全部内容
-        String ext = originalFilename.substring(originalFilename.lastIndexOf("."));
+        String ext = originalFilename.substring(originalFilename.lastIndexOf(".")).toLowerCase();
+        Set<String> ALLOWED = Set.of(".jpg", ".jpeg", ".png", ".gif", ".webp");
+        if (!ALLOWED.contains(ext)) {
+            throw new RuntimeException("仅支持上传 jpg/jpeg/png/gif/webp 图片");
+        }
+        if (file.getSize() > 5 * 1024 * 1024) {
+            throw new RuntimeException("图片大小不能超过 5MB");
+        }
+
         //随机改名(防止名字重复覆盖)
         String newName= UUID.randomUUID()+ext;
         //2.添加上传文件的储存路径
