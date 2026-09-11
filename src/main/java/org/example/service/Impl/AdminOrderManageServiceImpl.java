@@ -14,12 +14,19 @@ import org.example.service.AdminOrderManageService;
 import org.example.service.OrderStatusService;
 import org.example.util.RedisLock;
 import org.example.util.impl.RedisLockImpl;
+import org.redisson.api.RLock;
+import org.redisson.api.RedissonClient;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronization;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import java.time.LocalDateTime;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 public class AdminOrderManageServiceImpl implements AdminOrderManageService {
@@ -28,9 +35,9 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
     @Resource
     private WorkerAdminMapper workerAdminMapper;
     @Resource
-    private StringRedisTemplate stringRedisTemplate;
-    @Resource
     private OrderStatusService  orderStatusService;
+    @Autowired
+    private RedissonClient redissonClient;
     /**
      * 工单管理分页查询
      * @param orderManageDTO
@@ -70,13 +77,24 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
     @Transactional
     @Override
     public void getOrder(Long id,Long workerId) {
-        RedisLock redisLock = new RedisLockImpl("order:"+id,stringRedisTemplate);
+
         Long userId = BaseContext.getCurrentId();
-        boolean isLock = redisLock.tryLock(10L);
-        if(!isLock){
-            throw new RuntimeException("派单繁忙，请重试");
-        }
+
+        RLock lock = redissonClient.getLock("lock:order:" + id);
         try{
+            boolean acquired = lock.tryLock(10, TimeUnit.SECONDS);
+            if(!acquired){
+                throw new RuntimeException("派单繁忙，请重试");
+            }
+            // ⑨ 关键：不在 finally 里 unlock，注册到事务回调，事务提交后才释放锁
+            TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
+                @Override
+                public void afterCompletion(int status) {
+                    if (lock.isHeldByCurrentThread()) {
+                        lock.unlock();
+                    }
+                }
+            });
         //根据工单id查询对应的单子
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         if(order==null){
@@ -89,9 +107,10 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
             order.setWorkerId(workerId);
         //调用状态机更改对应的数据以及更新日志
         orderStatusService.transition(order,1,"admin",userId,"管理员派单给:"+worker.getName());
-        }
-        finally {
-            redisLock.unlock();
+
+        } catch (InterruptedException e) {
+            Thread.currentThread().interrupt();
+            throw new RuntimeException("派单被中断");
         }
     }
 

@@ -6,6 +6,7 @@ import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.data.redis.core.script.DefaultRedisScript;
 
 import java.util.Collections;
+import java.util.UUID;
 import java.util.concurrent.TimeUnit;
 
 
@@ -33,6 +34,7 @@ public class RedisLockImpl implements RedisLock {
     @Override
     public boolean tryLock(Long timeout) {
         //获取当前线程id
+        String current = UUID.randomUUID().toString().replace("-", "");
         long currentId = Thread.currentThread().getId();
         Boolean success = stringRedisTemplate.opsForValue().setIfAbsent(PREFIX_LOCK + name, currentId + "", timeout, TimeUnit.SECONDS);
         return Boolean.TRUE.equals(success);
