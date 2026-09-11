@@ -62,5 +62,7 @@ public class ServiceOrder {
     private String address;          // 拼接后的完整地址
     private String orderStatusName;  // 状态中文名
     private Integer distance;
+    // 非数据库字段：CAS 乐观锁用
+    private Integer fromStatus;
 
 }

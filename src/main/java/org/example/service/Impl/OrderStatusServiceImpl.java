@@ -79,9 +79,13 @@ public class OrderStatusServiceImpl implements OrderStatusService {
         workerAdminMapper.updateWorker(worker);}
         order.setUpdateTime(LocalDateTime.now());
         //更新工单数据库
-        adminOrderManageMapper.update(order);
+        order.setFromStatus(fromStatus);
+        int rows = adminOrderManageMapper.update(order);
+        if (rows == 0) {
+            throw new RuntimeException("工单状态已变更，请刷新后重试");
+        }
 
-  //④ INSERT service_order_log
+        //④ INSERT service_order_log
         ServiceOrderLog orderLog = ServiceOrderLog.builder()
                 .toStatus(targetStatus)
                 .createTime(LocalDateTime.now())

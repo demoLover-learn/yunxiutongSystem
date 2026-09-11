@@ -34,6 +34,7 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
             <if test="cancelTime!=null">cancel_time=#{cancelTime}</if>
         </set>
         where id=#{id}
+        <if test="fromStatus!=null">and order_status=#{fromStatus}</if>
     </update>
     <select id="getData" resultType="org.example.entity.ServiceOrder"
             parameterType="org.example.dto.AdminDTO.OrderManageDTO">

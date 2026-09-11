@@ -30,7 +30,7 @@ public interface AdminOrderManageMapper {
      * 动态更新数据库
      * @param order
      */
-    void update(ServiceOrder order);
+    int update(ServiceOrder order);
 
     /**
      * 插入数据库
