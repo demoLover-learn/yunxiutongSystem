@@ -11,9 +11,9 @@
                w.name as workerName,
                so.order_no as orderNo
         from service_order_comment soc
-        inner join user u on soc.user_id=u.id
-        inner join worker w on soc.worker_id=w.id
-        inner join service_order so on soc.order_id=so.id
+        left join user u on soc.user_id=u.id
+        left join worker w on soc.worker_id=w.id
+        left join service_order so on soc.order_id=so.id
         <where>
             <if test="orderNo!=null and orderNo!=''">
                 so.order_no like concat('%',#{orderNo},'%')

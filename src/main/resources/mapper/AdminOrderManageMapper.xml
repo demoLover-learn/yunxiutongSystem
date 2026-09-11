@@ -52,9 +52,9 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
             when 4 then '已取消'
             end as orderStatusName
             from service_order so
-            inner join user u on so.user_id=u.id
-            inner join service_item si on so.service_item_id=si.id
-            inner join user_address ua on so.address_id=ua.id
+            left join user u on so.user_id=u.id
+            left join service_item si on so.service_item_id=si.id
+            left join user_address ua on so.address_id=ua.id
             left join worker w on so.worker_id = w.id
             <where>
                 <if test="orderNo!=null">
@@ -90,9 +90,9 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
             round(st_distance_sphere(point(ua.longitude,ua.latitude)
         ,point(w.longitude,w.latitude))/1000) as distance
         from service_order so
-        inner join user u on so.user_id=u.id
-        inner join service_item si on so.service_item_id=si.id
-        inner join user_address ua on so.address_id=ua.id
+        left join user u on so.user_id=u.id
+        left join service_item si on so.service_item_id=si.id
+        left join user_address ua on so.address_id=ua.id
         left join worker w on so.worker_id=w.id
         <where>
             <if test="id!=null">
