@@ -25,7 +25,10 @@ public class UserAdminServiceImpl implements UserAdminService {
      */
     @Override
     public PageResult getUser(UserAdminPageQueryDTO pageQueryDTO) {
-        PageHelper.startPage(pageQueryDTO.getPage(),pageQueryDTO.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = pageQueryDTO.getPage() == null || pageQueryDTO.getPage() < 1 ? 1 : pageQueryDTO.getPage();
+        int pageSize = pageQueryDTO.getPageSize() == null || pageQueryDTO.getPageSize() < 1 ? 10 : pageQueryDTO.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
         //根据pageQuery的内容查询对应的内容
         //select * from user where nickname=${nickname} and phone like concat${'%',${phone},'%'} and status=${status}
         Page<User> page= userAdminMapper.getUser(pageQueryDTO);

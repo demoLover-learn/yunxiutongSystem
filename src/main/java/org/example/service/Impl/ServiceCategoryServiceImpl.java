@@ -45,7 +45,10 @@ public class ServiceCategoryServiceImpl implements ServiceCategoryService {
     @Override
     public PageResult getServiceCategory(ServiceCategoryDTO serviceCategoryDTO) {
         //开始页码和页码中内容的数量
-        PageHelper.startPage(serviceCategoryDTO.getPage(),serviceCategoryDTO.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = serviceCategoryDTO.getPage() == null || serviceCategoryDTO.getPage() < 1 ? 1 : serviceCategoryDTO.getPage();
+        int pageSize = serviceCategoryDTO.getPageSize() == null || serviceCategoryDTO.getPageSize() < 1 ? 10 : serviceCategoryDTO.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
         //查询对应的数据
         Page<ServiceCategory> result =serviceCategoryMapper.getServiceCategory(serviceCategoryDTO);
         //取出对应的数据

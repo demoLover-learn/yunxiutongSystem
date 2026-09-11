@@ -38,7 +38,10 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
      */
     @Override
     public PageResult pageQuery(OrderManageDTO orderManageDTO) {
-        PageHelper.startPage(orderManageDTO.getPage(),orderManageDTO.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = orderManageDTO.getPage() == null || orderManageDTO.getPage() < 1 ? 1 : orderManageDTO.getPage();
+        int pageSize = orderManageDTO.getPageSize() == null || orderManageDTO.getPageSize() < 1 ? 10 : orderManageDTO.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
 
         Page<ServiceOrder> result= adminOrderManageMapper.getData(orderManageDTO);
 

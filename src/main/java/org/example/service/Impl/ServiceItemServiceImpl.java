@@ -31,7 +31,10 @@ public class ServiceItemServiceImpl implements ServiceItemService {
     @Override
     public PageResult pageQuery(ServiceItemPageQueryDTO serviceItemPageQueryDTO) {
         //把起始页码和页码记录的内容总条数传进去
-        PageHelper.startPage(serviceItemPageQueryDTO.getPage(),serviceItemPageQueryDTO.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = serviceItemPageQueryDTO.getPage() == null || serviceItemPageQueryDTO.getPage() < 1 ? 1 : serviceItemPageQueryDTO.getPage();
+        int pageSize = serviceItemPageQueryDTO.getPageSize() == null || serviceItemPageQueryDTO.getPageSize() < 1 ? 10 : serviceItemPageQueryDTO.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
 
         //查询数据库对应数据
         Page<ServiceItem> page=serviceItemMapper.selectAll(serviceItemPageQueryDTO);

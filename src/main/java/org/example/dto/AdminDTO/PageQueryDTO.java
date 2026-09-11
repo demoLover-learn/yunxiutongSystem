@@ -10,9 +10,9 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class PageQueryDTO {
     //页码
-    private int page;
+    private Integer page=1;
     //页码大小
-    private int pageSize;
+    private Integer pageSize=10;
 
     private Long id;
 

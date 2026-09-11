@@ -31,7 +31,10 @@ public class UserServiceServiceImpl implements UserServiceService {
     @Override
     public List<ServiceItemVO> pageQuery(ServiceItemPageQueryDTO query) {
         //设置开始页码，和当前页码的容量
-        PageHelper.startPage(query.getPage(),query.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = query.getPage() == null || query.getPage() < 1 ? 1 : query.getPage();
+        int pageSize = query.getPageSize() == null || query.getPageSize() < 1 ? 10 : query.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
         //分页查询
         Page<ServiceItem> page = serviceItemMapper.selectAllowed(query);
         //给VO赋值

@@ -35,4 +35,7 @@ public interface UserAddressMapper {
      */
     @Delete("delete from user_address where id=#{id} and user_id=#{userId}")
     void deleteAddress(Long id,Long userId);
+
+    @Select("select * from user_address where id=#{id} and user_id=#{userId}")
+    UserAddress getByIdAndUserId(Long id, Long userId);
 }

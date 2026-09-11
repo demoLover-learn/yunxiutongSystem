@@ -9,13 +9,16 @@ import org.example.dto.UserDTO.UserCommentDTO;
 import org.example.dto.UserDTO.UserOrderDTO;
 import org.example.entity.ServiceOrder;
 import org.example.entity.ServiceOrderComment;
+import org.example.entity.UserAddress;
 import org.example.mapper.AdminOrderManageMapper;
 import org.example.mapper.ServiceItemMapper;
+import org.example.mapper.UserAddressMapper;
 import org.example.mapper.UserOrderCommentMapper;
 import org.example.service.OrderStatusService;
 import org.example.service.UserOrderService;
 import org.example.vo.UserOrderVO;
 import org.springframework.beans.BeanUtils;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -34,6 +37,8 @@ public class UserOrderServiceImpl implements UserOrderService {
     private AdminOrderManageMapper adminOrderManageMapper;
     @Resource
     private OrderStatusService orderStatusService;
+    @Autowired
+    private UserAddressMapper userAddressMapper;
 
     /**
      * 确认订单
@@ -43,10 +48,16 @@ public class UserOrderServiceImpl implements UserOrderService {
     @Transactional
     @Override
     public Long ConfirmOrder(UserOrderDTO userOrderDTO) {
-        //新建实体类接受信息\
-        ServiceOrder serviceOrder = new ServiceOrder();
         //当前用户id
         Long userId = BaseContext.getCurrentId();
+        // 校验地址归属
+        UserAddress address = userAddressMapper.getByIdAndUserId(userOrderDTO.getAddressId(), userId);
+        if (address == null) {
+            throw new RuntimeException("收货地址不存在");
+        }
+        //新建实体类接受信息
+        ServiceOrder serviceOrder = new ServiceOrder();
+
         //生成订单号
         String orderNo="YXT"+System.currentTimeMillis();
         //订单的超时时间
@@ -56,6 +67,9 @@ public class UserOrderServiceImpl implements UserOrderService {
         BeanUtils.copyProperties(userOrderDTO, serviceOrder);
         //查询对应项目的金额
         BigDecimal totalAmount=serviceItemMapper.getAmountById(userOrderDTO.getServiceItemId());
+        if (totalAmount == null) {
+            throw new RuntimeException("服务项目不存在或已下架");
+        }
         serviceOrder.setUserId(userId);
         serviceOrder.setOrderNo(orderNo);
         serviceOrder.setPayStatus(0);
@@ -169,7 +183,10 @@ public class UserOrderServiceImpl implements UserOrderService {
         //获取当前用户id
         Long userId = BaseContext.getCurrentId();
         //设置起始页和每页的大小
-        PageHelper.startPage(userOrderDTO.getPage(),userOrderDTO.getPageSize());
+        //分页参数守卫：非法值回退为第1页、每页10条（DTO为int基本类型，不传默认0）
+        int pageNum = userOrderDTO.getPage() < 1 ? 1 : userOrderDTO.getPage();
+        int pageSize = userOrderDTO.getPageSize() < 1 ? 10 : userOrderDTO.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
         //查询数据
        Page<ServiceOrder> page=adminOrderManageMapper.getDataByUserIdAndStatus(userId,userOrderDTO.getStatus());
         //判断是否为空

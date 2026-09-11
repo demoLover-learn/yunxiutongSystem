@@ -25,7 +25,10 @@ public class ServiceCommentServiceImpl implements ServiceCommentService {
     @Override
     public PageResult getComment(ServiceCommentPageQueryDTO serviceCommentPageQueryDTO) {
         //设置开始页和内容大小
-        PageHelper.startPage(serviceCommentPageQueryDTO.getPage(), serviceCommentPageQueryDTO.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = serviceCommentPageQueryDTO.getPage() == null || serviceCommentPageQueryDTO.getPage() < 1 ? 1 : serviceCommentPageQueryDTO.getPage();
+        int pageSize = serviceCommentPageQueryDTO.getPageSize() == null || serviceCommentPageQueryDTO.getPageSize() < 1 ? 10 : serviceCommentPageQueryDTO.getPageSize();
+        PageHelper.startPage(pageNum, pageSize);
         //新建实体类接收参数
         ServiceOrderComment orderComment = new ServiceOrderComment();
         BeanUtils.copyProperties(serviceCommentPageQueryDTO, orderComment);

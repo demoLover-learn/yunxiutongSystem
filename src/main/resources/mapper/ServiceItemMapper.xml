@@ -2,7 +2,7 @@
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
 <mapper namespace="org.example.mapper.ServiceItemMapper">
-    <insert id="insert" parameterType="org.example.entity.ServiceItem">
+    <insert id="insert" parameterType="org.example.entity.ServiceItem" useGeneratedKeys="true" keyProperty="id">
         insert into service_item (category_id, name, price, description, duration_minutes, status, create_time, update_time) VALUES
         (#{categoryId},#{name},#{price},#{description},#{durationMinutes},#{status},#{createTime},#{updateTime})
     </insert>
@@ -55,7 +55,7 @@
     <select id="getAmountById" resultType="java.math.BigDecimal" parameterType="java.lang.Long">
         select price
         from service_item
-        where id=#{id}
+        where id=#{id} and status=1
     </select>
 
 

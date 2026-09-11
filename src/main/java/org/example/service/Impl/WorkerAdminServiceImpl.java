@@ -28,7 +28,10 @@ public class WorkerAdminServiceImpl implements WorkerAdminService {
      */
     public PageResult getWorker(WorkerAdminPageQueryDTO queryDTO) {
         //设置开始页码，和一页的数量
-        PageHelper.startPage(queryDTO.getPage(),queryDTO.getPageSize());
+        //分页参数守卫：空或非法值回退为第1页、每页10条
+        int pageNum = queryDTO.getPage() == null || queryDTO.getPage() < 1 ? 1 : queryDTO.getPage();
+        int pageSize = queryDTO.getPageSize() == null || queryDTO.getPageSize() < 1 ? 10 : queryDTO.getPageSize();
+        PageHelper.startPage(pageNum,pageSize);
         Worker worker = new Worker();
         BeanUtils.copyProperties(queryDTO,worker);
         //根据前端传来的信息进行模糊查询
