@@ -38,15 +38,15 @@ logging:
 yxt:
   jwt:
     # 设置jwt签名加密时使用的秘钥
-    adminSecretKey: yxt-woaini-zhendema-zhende1-woyeaini
+    adminSecretKey: ${JWT_ADMIN_SECRET:yxt-dev-admin-key-change-in-prod}
     # 设置jwt过期时间
     adminTtl: 72000000
     # 设置前端传递过来的令牌名称
     adminTokenName: token
-    user-secret-key: yxt-zhangjuntongxue-haojiubujian-nihaihaoma
+    user-secret-key: ${JWT_USER_SECRET:yxt-dev-user-key-change-in-prod}
     user-token-name: token
     user-ttl: 72000000
-    worker-secret-key: yxt-woshogongrenduande-woxihuankanhua
+    worker-secret-key: ${JWT_WORKER_SECRET:yxt-dev-worker-key-change-in-prod}
     worker-ttl: 72000000
     worker-token-name: token
 
