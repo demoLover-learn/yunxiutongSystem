@@ -1,0 +1,38 @@
+services:   #用到的服务：redis,mysql,app
+  redis:
+    image: redis:latest     #选择镜像
+    ports:
+      - "6379:6379"       #选择端口映射
+
+  mysql:
+    image: mysql:8.0
+    ports:
+      - "3307:3306"
+    environment:      #环境变量的配置
+      MYSQL_ROOT_PASSWORD: 123456     #mysql的登陆密码
+      MYSQL_DATABASE: yunxiutong      #使用的数据库
+    volumes:
+      - mysql-data:/var/lib/mysql     #mysql挂载卷的名称和目录
+      - ./init:/docker-entrypoint-initdb.d      #初始化时默认执行 .sql文件
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "127.0.0.1", "-uroot", "-p123456"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+
+  app:
+    build: .      #docker build
+    image: yunxiutong:1.0   #-t构建的版本
+    ports:
+      - "8081:8080"   #外部端口映射
+    environment:
+      YXT_DATASOURCE_HOST: mysql  #
+      STYX_DATA_REDIS_HOST: redis
+    depends_on:
+      mysql:
+        condition: service_healthy
+      redis:
+        condition: service_started
+
+volumes:
+  mysql-data:

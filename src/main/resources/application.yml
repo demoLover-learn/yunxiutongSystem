@@ -13,7 +13,7 @@ spring:
   data:
     redis:
       host: ${STYX.data.redis.host}
-      password: ${STYX.data.redis.password}
+#      password: ${STYX.data.redis.password}
       lettuce:
         pool:
           max-active: ${STYX.data.redis.lettuce.pool.max-active}

@@ -1,0 +1,16 @@
+# 构建上下文排除清单：这里列出的东西不会被打包发给 Docker daemon，构建更快
+# 语法和 .gitignore 类似，支持 * 通配，! 表示"例外，不要排除"
+
+.git
+.gitignore
+.idea
+.vscode
+*.iml
+*.md
+*.log
+
+# ⚠️ 下面两行是关键，不能想当然写！
+# 不能直接写 "target/" —— 那会让 Dockerfile 里的 COPY target/*.jar 找不到文件而构建失败
+# 正确做法：排除 target 下所有内容，但把 .jar 单独捞回来
+target/*
+!target/*.jar
