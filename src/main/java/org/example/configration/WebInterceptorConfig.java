@@ -5,15 +5,13 @@ import org.example.Intercepter.AdminInterceptor;
 import org.example.Intercepter.CommonInterceptor;
 import org.example.Intercepter.UserInterceptor;
 import org.example.Intercepter.WorkerInterceptor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.context.properties.ConfigurationProperties;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 @Configuration
-public class WenConfig implements WebMvcConfigurer {
+public class WebInterceptorConfig implements WebMvcConfigurer {
 
     @Resource
     private AdminInterceptor adminInterceptor;

@@ -78,4 +78,20 @@ public interface AdminOrderManageMapper {
 
     @Select("select *, order_status as status from service_order where order_status = 0 and pay_status = 0 and pay_expire_time < now() limit 500")
     List<ServiceOrder> getTimeoutOrders();
+
+    /**
+     * 根据用户id查询工具
+     * @param userId
+     * @return
+     */
+    @Select("select * from service_order where user_id=#{userId}")
+    List<ServiceOrder> listByUserId(Long userId);
+
+    /**
+     * 根据订单id查询对应的订单
+     * @param orderNo
+     * @return
+     */
+    @Select("select * from service_order where order_no=#{orderNo}")
+    ServiceOrder getByOrderNo(String orderNo);
 }

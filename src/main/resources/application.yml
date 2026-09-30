@@ -5,6 +5,12 @@ spring:
     name: yunxiutongDispatchSystem
   profiles:
     active: dev
+  ai:
+    openai:
+      base-url: https://api.deepseek.com
+      chat:
+        options:
+          model: deepseek-flash
   datasource:
     driver-class-name: ${YXT.datasource.driver-class-name}
     username: ${YXT.datasource.username}

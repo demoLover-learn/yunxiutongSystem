@@ -12,19 +12,14 @@ import org.example.mapper.AdminOrderManageMapper;
 import org.example.mapper.WorkerAdminMapper;
 import org.example.service.AdminOrderManageService;
 import org.example.service.OrderStatusService;
-import org.example.util.RedisLock;
-import org.example.util.impl.RedisLockImpl;
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
-import org.springframework.transaction.support.TransactionSynchronizationAdapter;
 import org.springframework.transaction.support.TransactionSynchronizationManager;
 
-import java.time.LocalDateTime;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
 

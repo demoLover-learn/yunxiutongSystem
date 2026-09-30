@@ -29,7 +29,7 @@ public class ServiceOrder {
     private LocalDateTime appointmentTime;
     //工单状态 0'待接单',1'已接单' 2,'服务中' 3,'已完成' 4,'已取消'
     private Integer status;
-    //支付状态
+    //支付状态 0.未支付  1.已支付
     private  Integer payStatus;
     //订单金额
     private BigDecimal totalAmount;
