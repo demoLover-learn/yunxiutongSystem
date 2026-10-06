@@ -1,6 +1,7 @@
 package org.example.configration;
 
 
+import org.example.aitools.UserOrderTools;
 import org.springframework.ai.chat.client.ChatClient;
 import org.springframework.ai.chat.client.advisor.MessageChatMemoryAdvisor;
 import org.springframework.ai.chat.client.advisor.SimpleLoggerAdvisor;
@@ -49,8 +50,14 @@ public class AiConfig {
      * @return
      */
     @Bean
-    public ChatClient chatClient(ChatClient.Builder builder,ChatMemory chatMemory){
+    public ChatClient userChatClient(ChatClient.Builder builder,
+                                     ChatMemory chatMemory,
+                                     UserOrderTools userOrderTools){
         return builder
+                .defaultTools(userOrderTools)
+                .defaultSystem("你是云修通的用户客服助手。\n" +
+                        "                    你只能查询当前登录用户本人的订单，不要尝试查询其他用户。\n" +
+                        "                    用户问订单状态时，调用工具查真实数据，不要编造。结果以json的格式返回")
                 .defaultAdvisors(
                         new SimpleLoggerAdvisor(),
                         MessageChatMemoryAdvisor.builder(chatMemory).build()

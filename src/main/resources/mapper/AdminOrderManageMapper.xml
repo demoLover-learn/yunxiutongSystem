@@ -197,5 +197,14 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
           and so.order_status in (1, 2)
         order by so.create_time desc
     </select>
+    <select id="getByOrderNo" resultType="org.example.entity.ServiceOrder" parameterType="java.lang.String">
+        select *,order_status as status,
+               w.name as workerName,
+               si.name as serviceItemName
+        from service_order so
+        inner join service_item si on so.service_item_id=si.id
+        inner join worker w on so.worker_id = w.id
+        where order_no=#{orderNo}
+    </select>
 
 </mapper>

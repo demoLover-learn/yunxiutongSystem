@@ -32,7 +32,7 @@ public class WebInterceptorConfig implements WebMvcConfigurer {
                 //放行admin登录接口
                 .excludePathPatterns("/api/admin/auth/login");
         registry.addInterceptor(userInterceptor)
-                .addPathPatterns("/api/user/**")
+                .addPathPatterns("/api/user/**","/api/ai/**")
         .excludePathPatterns("/api/user/login","/api/user/register");
         //拦截所有接口做校验
         registry.addInterceptor(workerInterceptor)

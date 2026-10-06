@@ -5,6 +5,7 @@ import org.apache.ibatis.annotations.Mapper;
 import org.apache.ibatis.annotations.Select;
 import org.example.dto.AdminDTO.OrderManageDTO;
 import org.example.entity.ServiceOrder;
+import org.example.vo.UserOrderVO;
 import org.example.vo.WorkerBenchVO;
 
 import java.util.List;
@@ -84,14 +85,14 @@ public interface AdminOrderManageMapper {
      * @param userId
      * @return
      */
-    @Select("select * from service_order where user_id=#{userId}")
-    List<ServiceOrder> listByUserId(Long userId);
+    @Select("select *, order_status as status from service_order where user_id=#{userId} order by create_time desc limit 10")
+    List<UserOrderVO> listByUserId(Long userId);
 
     /**
      * 根据订单id查询对应的订单
      * @param orderNo
      * @return
      */
-    @Select("select * from service_order where order_no=#{orderNo}")
+
     ServiceOrder getByOrderNo(String orderNo);
 }
