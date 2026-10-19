@@ -11,11 +11,16 @@ spring:
       chat:
         options:
           model: deepseek-flash
+      embedding:
+        base-url: https://maas.qianwenaiapi.com/compatible-mode
+        options:
+          model:  qwen3.7-text-embedding-flash
   datasource:
     driver-class-name: ${YXT.datasource.driver-class-name}
     username: ${YXT.datasource.username}
     password: ${YXT.datasource.password}
     url:  jdbc:mysql://${YXT.datasource.host}:${YXT.datasource.port}/${YXT.datasource.database}?serverTimezone=Asia/Shanghai&useUnicode=true&characterEncoding=utf-8&zeroDateTimeBehavior=convertToNull&useSSL=false&allowPublicKeyRetrieval=true
+
   data:
     redis:
       host: ${STYX.data.redis.host}
@@ -52,5 +57,10 @@ yxt:
     worker-secret-key: ${JWT_WORKER_SECRET:yxt-dev-worker-key-change-in-prod-2026-extra-secret}
     worker-token-name: token
     worker-ttl: 72000000
+#向量数据库的相关配置
+ai:
+  vector:
+    url:  jdbc:postgresql://localhost:5432/yunxiutong_ai
+    username: postgres
 
 

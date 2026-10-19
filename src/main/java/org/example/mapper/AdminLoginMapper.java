@@ -17,7 +17,11 @@ public interface AdminLoginMapper {
     @Select("select * from employee where username=#{username}")
     Employee getByName(String username);
 
-
-
-
+    /**
+     * 根据id查询管理员信息
+     * @param adminId
+     * @return
+     */
+    @Select("select username from employee where id=#{adminId}")
+    Employee getById(Long adminId);
 }
