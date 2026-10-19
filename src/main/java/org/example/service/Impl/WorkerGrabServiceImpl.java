@@ -64,7 +64,7 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
             if (!acquired){
                 throw new RuntimeException(" 抢单繁忙，请稍后重试");
             }
-            // ⑨ 关键：不在 finally 里 unlock，注册到事务回调，事务提交后才释放锁
+            //  关键：不在 finally 里 unlock，注册到事务回调，事务提交后才释放锁
             TransactionSynchronizationManager.registerSynchronization(
                     new TransactionSynchronization() {
                         @Override

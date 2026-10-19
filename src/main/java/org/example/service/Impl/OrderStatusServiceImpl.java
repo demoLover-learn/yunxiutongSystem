@@ -1,10 +1,12 @@
 package org.example.service.Impl;
 
 import jakarta.annotation.Resource;
+import org.example.entity.GrabOrderRecord;
 import org.example.entity.ServiceOrder;
 import org.example.entity.ServiceOrderLog;
 import org.example.entity.Worker;
 import org.example.mapper.AdminOrderManageMapper;
+import org.example.mapper.GrabOrderRecordMapper;
 import org.example.mapper.ServiceOrderLogMapper;
 import org.example.mapper.WorkerAdminMapper;
 import org.example.service.OrderStatusService;
@@ -19,6 +21,8 @@ public class OrderStatusServiceImpl implements OrderStatusService {
     private AdminOrderManageMapper adminOrderManageMapper;
     @Resource
     private WorkerAdminMapper workerAdminMapper;
+    @Resource
+    private GrabOrderRecordMapper grabOrderRecordMapper;
     @Resource
     private ServiceOrderLogMapper serviceOrderLogMapper;
 
@@ -39,11 +43,11 @@ public class OrderStatusServiceImpl implements OrderStatusService {
 
         //抽取初始状态码
         Integer fromStatus = order.getStatus();
-        //② isAllowed(from, target) 校验 → 不合法抛异常
+        // isAllowed(from, target) 校验 → 不合法抛异常
         if(!isAllowed(fromStatus,targetStatus)){
             throw new RuntimeException("工单状态不支持更改");
         }
-  //③ 执行业务变更（switch targetStatus）→ 改时间字段 + 工人状态
+  // 执行业务变更（switch targetStatus）→ 改时间字段 + 工人状态
         switch (targetStatus){
             case 1:
                     order.setStatus(targetStatus);
@@ -69,6 +73,8 @@ public class OrderStatusServiceImpl implements OrderStatusService {
              case 4:
                  order.setStatus(targetStatus);
                  order.setCancelTime(LocalDateTime.now());
+                 // 取消后必须释放工单归属，否则"已接单后被取消"的单会一直挂在工人名下
+                 order.setWorkerId(null);
                  if(fromStatus==1){
                  worker.setServiceStatus(1);}
                  break;
@@ -85,7 +91,7 @@ public class OrderStatusServiceImpl implements OrderStatusService {
             throw new RuntimeException("工单状态已变更，请刷新后重试");
         }
 
-        //④ INSERT service_order_log
+        // INSERT service_order_log
         ServiceOrderLog orderLog = ServiceOrderLog.builder()
                 .toStatus(targetStatus)
                 .createTime(LocalDateTime.now())
@@ -95,6 +101,13 @@ public class OrderStatusServiceImpl implements OrderStatusService {
                 .operatorId(operatorId)
                 .operatorType(operatorType).build();
         serviceOrderLogMapper.insert(orderLog);
+
+        // 接单记录：抢单 / 派单成功后落一条，取消时 worker_id 会被清空，
+        // 工人端"已取消"历史靠这张表回溯"这单当初是我接的"
+        if (targetStatus == 1 && order.getWorkerId() != null) {
+            grabOrderRecordMapper.insert(new GrabOrderRecord(
+                    null, order.getId(), order.getWorkerId(), 1, LocalDateTime.now()));
+        }
     }
 
     private boolean isAllowed(Integer from,Integer target){

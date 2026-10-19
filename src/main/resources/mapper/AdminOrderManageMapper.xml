@@ -18,6 +18,7 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
         update service_order
         <set>
             <if test="serviceItemId!=null">service_item_id=#{serviceItemId},</if>
+            <if test="status!=null and status==4">worker_id=null,</if>
             <if test="workerId!=null">worker_id=#{workerId},</if>
             <if test="addressId!=null">address_id=#{addressId},</if>
             <if test="appointmentTime!=null">appointment_time=#{appointmentTime},</if>
@@ -161,10 +162,20 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
         left join user_address ad on so.address_id=ad.id
         left join service_item si on so.service_item_id=si.id
         <where>
-            so.worker_id=#{workerId}
-        <if test="status!=null">
-            and so.order_status=#{status}
-        </if>
+            <choose>
+                <when test="status!=null and status==4">
+                    so.order_status=4
+                    and (so.worker_id=#{workerId} or exists (
+                        select 1 from grab_order_record g
+                        where g.order_id=so.id and g.worker_id=#{workerId} and g.grab_result=1))
+                </when>
+                <otherwise>
+                    so.worker_id=#{workerId}
+                    <if test="status!=null">
+                        and so.order_status=#{status}
+                    </if>
+                </otherwise>
+            </choose>
         </where>
         order by so.create_time desc
     </select>
@@ -203,7 +214,7 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
                si.name as serviceItemName
         from service_order so
         inner join service_item si on so.service_item_id=si.id
-        inner join worker w on so.worker_id = w.id
+        left join worker w on so.worker_id = w.id
         where order_no=#{orderNo}
     </select>
 
