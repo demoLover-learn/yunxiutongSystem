@@ -142,6 +142,7 @@ insert into service_order( order_no, user_id, service_item_id, worker_id, addres
         left join worker w on w.id=#{workerId}
         where
             so.order_status=0
+            and so.pay_status=1
     </select>
     <select id="getDataByWorkerIdAndStatus" resultType="org.example.entity.ServiceOrder">
         select so.*,

@@ -79,6 +79,9 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
             ServiceOrder orders = adminOrderManageMapper.getOrderDetailById(id);
             if (orders == null) throw new RuntimeException("工单不存在");
             if (orders.getStatus() != 0) throw new RuntimeException("工单已被抢");
+            if (!Integer.valueOf(1).equals(orders.getPayStatus())) {
+                throw new RuntimeException("工单未支付，不能接单");
+            }
             orders.setWorkerId(workerId);
             orderStatusService.transition(orders,1,"worker",
                     workerId,"工人:"+worker.getName()+"抢到了订单");

@@ -99,6 +99,9 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
         if(worker==null){
             throw new RuntimeException("工人不存在");
         }
+        if (!Integer.valueOf(1).equals(order.getPayStatus())) {
+            throw new RuntimeException("工单未支付，不能派单");
+        }
             order.setWorkerId(workerId);
         //调用状态机更改对应的数据以及更新日志
         orderStatusService.transition(order,1,"admin",userId,"管理员派单给:"+worker.getName());
