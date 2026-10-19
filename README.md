@@ -442,5 +442,4 @@ A：由 Apache Tika 解析，支持 docx / pdf / txt / html 等常见格式；�
 
 ## 作者
 
-- 孙楠 · 南阳师范学院 软件工程（2027 届）
-- 求职意向：Java 后端开发实习生
+个人全栈实践项目：Spring Boot 后端 + 三端联调 + Spring AI 智能客服，欢迎通过 Issue 交流。
