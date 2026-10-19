@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import jakarta.annotation.Resource;
 import org.example.dto.WorkerDTO.WorkerLoginDTO;
 import org.example.dto.WorkerDTO.WorkerRegisterDTO;
@@ -32,7 +34,7 @@ public class WorkerLoginServiceImpl implements WorkerLoginService {
         //判断工人是否存在
         if(worker==null){
             //不存在返回错误
-            throw new RuntimeException("账号或者密码错误");
+            throw new BusinessException("账号或者密码错误");
         }
 
         //验证密码是否错误
@@ -40,19 +42,19 @@ public class WorkerLoginServiceImpl implements WorkerLoginService {
         if (stored.startsWith("$2a$")) {
             // 已是 BCrypt 密文，直接比对
             if (!bCryptPasswordEncoder.matches(workerLoginDTO.getPassword(), stored)) {
-                throw new RuntimeException("账号或者密码错误");
+                throw new BusinessException("账号或者密码错误");
             }
         } else {
             // 历史明文密码：先明文比对，通过则顺手升级为 BCrypt
             if (!stored.equals(workerLoginDTO.getPassword())) {
-                throw new RuntimeException("账号或者密码错误");
+                throw new BusinessException("账号或者密码错误");
             }
             worker.setPassword(bCryptPasswordEncoder.encode(workerLoginDTO.getPassword()));
             workerAdminMapper.updateWorker(worker);
         }
         //判断是否封禁
         if (worker.getStatus()==0){
-            throw new RuntimeException("账号已被封禁，请联系管理员");
+            throw new BusinessException("账号已被封禁，请联系管理员");
         }
         //返回用户信息
         return worker;
@@ -71,7 +73,7 @@ public class WorkerLoginServiceImpl implements WorkerLoginService {
         //判断当前帐号是否存在
         if (worker != null){
             //存在返回已注册
-            throw new RuntimeException("账号已注册");
+            throw new BusinessException("账号已注册");
         }
         //新建实体类
         Worker worker1 = new Worker();

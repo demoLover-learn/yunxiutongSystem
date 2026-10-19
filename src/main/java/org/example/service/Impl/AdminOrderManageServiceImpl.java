@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
@@ -61,7 +63,7 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
        //根据id查询对应的信息
         ServiceOrder serviceOrder=adminOrderManageMapper.getOrderDetailById(id);
         if(serviceOrder==null){
-            throw new RuntimeException("工单不存在");
+            throw new BusinessException("工单不存在");
         }
     return serviceOrder;
     }
@@ -79,7 +81,7 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
         try{
             boolean acquired = lock.tryLock(10, TimeUnit.SECONDS);
             if(!acquired){
-                throw new RuntimeException("派单繁忙，请重试");
+                throw new BusinessException("派单繁忙，请重试");
             }
             // ⑨ 关键：不在 finally 里 unlock，注册到事务回调，事务提交后才释放锁
             TransactionSynchronizationManager.registerSynchronization(new TransactionSynchronization() {
@@ -93,11 +95,17 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
         //根据工单id查询对应的单子
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         if(order==null){
-            throw new RuntimeException("工单不存在");
+            throw new BusinessException("工单不存在");
         }
-            Worker worker = workerAdminMapper.getByWorkerId(workerId);
+        Worker worker = workerAdminMapper.getByWorkerId(workerId);
         if(worker==null){
-            throw new RuntimeException("工人不存在");
+                throw new BusinessException("工人不存在");
+        }
+        if (worker.getStatus() == 0)              throw new BusinessException("该工人已被封禁，无法派单");
+        if (worker.getServiceStatus() == 0)       throw new BusinessException("该工人正在休息，无法派单");
+        if (worker.getServiceStatus() == 2)       throw new BusinessException("该工人正在服务中，无法派单");
+        if (!Integer.valueOf(1).equals(order.getPayStatus())) {
+            throw new BusinessException("工单未支付，不能派单");
         }
             order.setWorkerId(workerId);
         //调用状态机更改对应的数据以及更新日志
@@ -105,7 +113,7 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
 
         } catch (InterruptedException e) {
             Thread.currentThread().interrupt();
-            throw new RuntimeException("派单被中断");
+            throw new BusinessException("派单被中断");
         }
     }
 
@@ -121,7 +129,7 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
 
         if(order==null){
-            throw new RuntimeException("工单不存在");
+            throw new BusinessException("工单不存在");
         }
         order.setCancelReason("管理员取消");
         //调用状态机更改对应的数据以及更新日志

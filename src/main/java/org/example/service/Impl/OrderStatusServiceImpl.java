@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import jakarta.annotation.Resource;
 import org.example.entity.GrabOrderRecord;
 import org.example.entity.ServiceOrder;
@@ -45,17 +47,17 @@ public class OrderStatusServiceImpl implements OrderStatusService {
         Integer fromStatus = order.getStatus();
         // isAllowed(from, target) 校验 → 不合法抛异常
         if(!isAllowed(fromStatus,targetStatus)){
-            throw new RuntimeException("工单状态不支持更改");
+            throw new BusinessException("工单状态不支持更改");
         }
   // 执行业务变更（switch targetStatus）→ 改时间字段 + 工人状态
         switch (targetStatus){
-            case 1:
+            case 1://已接单
                     order.setStatus(targetStatus);
                     order.setReceiveTime(LocalDateTime.now());
                 break;
-            case 2:
+            case 2://服务中
                 if(worker.getServiceStatus()!=1){
-                    throw new RuntimeException("工人正在服务中，无法开始新服务");
+                    throw new BusinessException("工人正在服务中，无法开始新服务");
                 };
                 order.setStatus(targetStatus);
                 order.setStartServiceTime(LocalDateTime.now());
@@ -63,20 +65,28 @@ public class OrderStatusServiceImpl implements OrderStatusService {
                     worker.setServiceStatus(2);}
 
                 break;
-            case 3:
+            case 3://已完成
                 order.setStatus(targetStatus);
                 order.setFinishServiceTime(LocalDateTime.now());
                 //0:下线休息 1：可接单 2：服务中
                 if(fromStatus==2){
                 worker.setServiceStatus(1);}
                 break;
-             case 4:
+             case 4://已取消
                  order.setStatus(targetStatus);
+                //先判断订单是否已支付
+                 if (Integer.valueOf(1).equals(order.getPayStatus())) {
+                     //支付的话直接设置订单状态为退款
+                     order.setPayStatus(2);
+                 }
                  order.setCancelTime(LocalDateTime.now());
                  // 取消后必须释放工单归属，否则"已接单后被取消"的单会一直挂在工人名下
                  order.setWorkerId(null);
-                 if(fromStatus==1){
-                 worker.setServiceStatus(1);}
+                 // 只有"这个工人手上没有正在服务的单"才放回可接单
+                 if (fromStatus == 1 && worker != null
+                         && adminOrderManageMapper.countServingOrders(worker.getId()) == 0) {
+                     worker.setServiceStatus(1);
+                 }
                  break;
         }
         if(worker!=null){
@@ -88,7 +98,7 @@ public class OrderStatusServiceImpl implements OrderStatusService {
         order.setFromStatus(fromStatus);
         int rows = adminOrderManageMapper.update(order);
         if (rows == 0) {
-            throw new RuntimeException("工单状态已变更，请刷新后重试");
+            throw new BusinessException("工单状态已变更，请刷新后重试");
         }
 
         // INSERT service_order_log

@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import jakarta.annotation.Resource;
 import org.example.dto.UserDTO.UserLoginDTO;
 import org.example.dto.UserDTO.UserRegisterDTO;
@@ -33,23 +35,23 @@ public class UserAuthServiceImpl implements UserAuthService {
         //判断账号是否存在
         if (user1==null ){
             //不存在返回错误
-            throw new RuntimeException("账号不存在，请先注册");
+            throw new BusinessException("账号不存在，请先注册");
         }
         //存在判断账号密码是否正确
         if (user1.getStatus()!=1){
-            throw new RuntimeException("账号已被封禁，请联系管理员");
+            throw new BusinessException("账号已被封禁，请联系管理员");
         }
         //验证密码是否错误
         String stored = user1.getPassword();
         if (stored.startsWith("$2a$")) {
             // 已是 BCrypt 密文，直接比对
             if (!bCryptPasswordEncoder.matches(userLoginDTO.getPassword(), stored)) {
-                throw new RuntimeException("账号或者密码错误");
+                throw new BusinessException("账号或者密码错误");
             }
         } else {
             // 历史明文密码：先明文比对，通过则顺手升级为 BCrypt
             if (!stored.equals(userLoginDTO.getPassword())) {
-                throw new RuntimeException("账号或者密码错误");
+                throw new BusinessException("账号或者密码错误");
             }
             user1.setPassword(bCryptPasswordEncoder.encode(userLoginDTO.getPassword()));
             userAuthMapper.update(user1);
@@ -67,7 +69,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         //新建实体类把属性拷贝过来
         User user = new User();
         if (userRegisterDTO==null){
-            throw new RuntimeException("请输入有效信息");
+            throw new BusinessException("请输入有效信息");
         }
         BeanUtils.copyProperties(userRegisterDTO, user);
         user.setCreateTime(LocalDateTime.now());
@@ -75,7 +77,7 @@ public class UserAuthServiceImpl implements UserAuthService {
         //根据phone查询数据库，看看账号是否重复，重复抛出错误
         User user1= userAuthMapper.getByPhone(userRegisterDTO.getPhone());
         if (user1!=null){
-            throw new RuntimeException("账号已存在，请直接登陆");
+            throw new BusinessException("账号已存在，请直接登陆");
         }
         //密码加密
         user.setPassword(bCryptPasswordEncoder.encode(userRegisterDTO.getPassword()));
