@@ -3,7 +3,7 @@
 面向上门维修场景的工单调度平台，覆盖 **管理员端 / 用户端 / 工人端** 三套角色的完整业务闭环：用户下单 → 管理员派单或工人抢单 → 上门服务 → 完成 → 评价。内置基于 **Spring AI + pgvector** 的智能客服与平台规则知识库。
 
 - 后端：Spring Boot 3.5.14 + MyBatis + MySQL 8 + Redis + JWT
-- AI：Spring AI 1.x（OpenAI 兼容协议）+ Tika + TokenTextSplitter + PgVectorStore
+- AI：Spring AI 1.18（OpenAI 兼容协议）+ Tika + TokenTextSplitter + PgVectorStore
 - 部署：Dockerfile + docker-compose（MySQL / Redis / App）
 
 ---
