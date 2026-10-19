@@ -13,7 +13,6 @@ import org.example.service.WorkerGrabService;
 
 import org.redisson.api.RLock;
 import org.redisson.api.RedissonClient;
-import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.transaction.support.TransactionSynchronization;
@@ -47,21 +46,11 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
     public void grabOrder(Long id) {
         //获取当前用户id
         Long workerId = BaseContext.getCurrentId();
-        //查询工人信息
-        Worker worker = workerAdminMapper.getByWorkerId(workerId);
-        if (worker.getServiceStatus()!=1){
-            throw new BusinessException("当前状态不可接单");
-        }
-        if (worker.getStatus()==0){
-            throw new BusinessException("封禁账号无法操作");
-        }
         //获取redission锁
         RLock lock = redissonClient.getLock("lock:order:" + id);
         //使用redission抢单
         try{
-//
             boolean acquired = lock.tryLock(10, TimeUnit.SECONDS);
-
             //判断是否拿到了
             if (!acquired){
                 throw new BusinessException(" 抢单繁忙，请稍后重试");
@@ -85,6 +74,17 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
                 throw new BusinessException("工单未支付，不能接单");
             }
             orders.setWorkerId(workerId);
+            //查询工人信息
+            Worker worker = workerAdminMapper.getByWorkerId(workerId);
+            if (worker == null){
+                throw new BusinessException("工人不存在");
+            }
+            if (worker.getServiceStatus()!=1){
+                throw new BusinessException("当前状态不可接单");
+            }
+            if (worker.getStatus()==0){
+                throw new BusinessException("封禁账号无法操作");
+            }
             orderStatusService.transition(orders,1,"worker",
                     workerId,"工人:"+worker.getName()+"抢到了订单");
 
