@@ -33,6 +33,19 @@ public class OrderTimeTask {
             log.warn("订单{}超时取消失败：{}", order.getId(), e.getMessage());
         }
         }
+    }
 
+    @Scheduled(cron = "0 */1 * * * ?")
+    public void cancelUnacceptedPaidOrders() {
+        List<ServiceOrder> orders = adminOrderManageMapper.getUnacceptedPaidOrders();
+        for (ServiceOrder order : orders) {
+            try{
+                order.setCancelReason("支付30分钟后无人接单，自动取消");
+                orderStatusService.transition(order, 4, "system", null, "支付后无人接单自动取消");
+
+            } catch (Exception e) {
+                log.warn("订单{}未接单：{}", order.getId(), e.getMessage());
+            }
+        }
     }
 }

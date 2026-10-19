@@ -95,7 +95,8 @@ public class AdminOrderManageServiceImpl implements AdminOrderManageService {
         if(order==null){
             throw new RuntimeException("工单不存在");
         }
-            Worker worker = workerAdminMapper.getByWorkerId(workerId);
+        Worker worker = workerAdminMapper.getByWorkerId(workerId);
+
         if(worker==null){
             throw new RuntimeException("工人不存在");
         }

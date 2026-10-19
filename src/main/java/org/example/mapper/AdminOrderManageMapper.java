@@ -76,9 +76,23 @@ public interface AdminOrderManageMapper {
 
     List<ServiceOrder> getServiceByWorkerId(Long workerId);
 
-
+    /**
+     * 定时任务取消未支付订单
+     * @return
+     */
     @Select("select *, order_status as status from service_order where order_status = 0 and pay_status = 0 and pay_expire_time < now() limit 500")
     List<ServiceOrder> getTimeoutOrders();
+
+    /**
+     * 定时取消已支付但是无人接单的订单
+     * @return
+     */
+    @Select("select *, order_status as status from service_order " +
+            "where order_status = 0 and pay_status = 1 " +
+            "and pay_time < now() - interval 30 minute limit 500")
+    List<ServiceOrder> getUnacceptedPaidOrders();
+
+
 
     /**
      * 根据用户id查询工具
@@ -95,4 +109,7 @@ public interface AdminOrderManageMapper {
      */
 
     ServiceOrder getByOrderNo(String orderNo);
+
+
+
 }
