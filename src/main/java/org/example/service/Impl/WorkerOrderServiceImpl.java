@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import jakarta.annotation.Resource;
 import org.example.context.BaseContext;
 import org.example.dto.WorkerDTO.WorkerOrderDTO;
@@ -74,11 +76,11 @@ public class WorkerOrderServiceImpl implements WorkerOrderService {
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         //不存在抛异常
         if (order==null){
-            throw new RuntimeException("工单不存在");
+            throw new BusinessException("工单不存在");
         }
         //校验当前订单是不是该工人的
         if(!workerId.equals(order.getWorkerId())){
-            throw new RuntimeException("无权操作此工单");
+            throw new BusinessException("无权操作此工单");
         }
         //使用状态机进行状态转换
         orderStatusService.transition(order,2,"worker",
@@ -98,11 +100,11 @@ public class WorkerOrderServiceImpl implements WorkerOrderService {
         //查询当前订单是否存在
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         if (order==null){
-            throw new RuntimeException("当前工单不存在");
+            throw new BusinessException("当前工单不存在");
         }
         //判断该工单是否属于当前操作工人
         if(!workerId.equals(order.getWorkerId())){
-            throw new RuntimeException("无权操作该订单");
+            throw new BusinessException("无权操作该订单");
         }
         //调用状态机进行状态转换
         orderStatusService.transition(order,3,"worker",workerId,"工单被完成");

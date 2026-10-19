@@ -110,6 +110,12 @@ public interface AdminOrderManageMapper {
 
     ServiceOrder getByOrderNo(String orderNo);
 
-
+    /**
+     * 查询工人服务中的工单数目
+     * @param workerId
+     * @return
+     */
+    @Select("select count(*) from service_order where worker_id=#{workerId} and order_status=2")
+    int countServingOrders(Long workerId);
 
 }

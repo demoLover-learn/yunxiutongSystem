@@ -1,5 +1,7 @@
 package org.example.Intercepter;
 
+
+import org.example.handler.BusinessException;
 import io.jsonwebtoken.Claims;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
@@ -48,7 +50,7 @@ public class AdminInterceptor implements HandlerInterceptor {
            String redisToken = stringRedisTemplate.opsForValue().get("login:admin:" + empId);
 
            if (redisToken == null || !redisToken.equals(token)) {
-               throw new RuntimeException("登录已失效，请重新登录");
+               throw new BusinessException("登录已失效，请重新登录");
            }
            stringRedisTemplate.expire("login:admin:" + empId, 2, TimeUnit.HOURS);
            BaseContext.setCurrentId(empId);

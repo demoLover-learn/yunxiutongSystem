@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
@@ -53,7 +55,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         // 校验地址归属
         UserAddress address = userAddressMapper.getByIdAndUserId(userOrderDTO.getAddressId(), userId);
         if (address == null) {
-            throw new RuntimeException("收货地址不存在");
+            throw new BusinessException("收货地址不存在");
         }
         //新建实体类接受信息
         ServiceOrder serviceOrder = new ServiceOrder();
@@ -68,7 +70,7 @@ public class UserOrderServiceImpl implements UserOrderService {
         //查询对应项目的金额
         BigDecimal totalAmount=serviceItemMapper.getAmountById(userOrderDTO.getServiceItemId());
         if (totalAmount == null) {
-            throw new RuntimeException("服务项目不存在或已下架");
+            throw new BusinessException("服务项目不存在或已下架");
         }
         serviceOrder.setUserId(userId);
         serviceOrder.setOrderNo(orderNo);
@@ -94,10 +96,10 @@ public class UserOrderServiceImpl implements UserOrderService {
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         if (order == null) {
             //判断工单是否存在
-            throw new RuntimeException("工单不存在");
+            throw new BusinessException("工单不存在");
         }
         if(!order.getUserId().equals(userId)) {
-            throw new RuntimeException("无权查看此订单");
+            throw new BusinessException("无权查看此订单");
         }
         //封装返回
         UserOrderVO orderVO = UserOrderVO.builder()
@@ -129,19 +131,19 @@ public class UserOrderServiceImpl implements UserOrderService {
         //根据id查询对应的工单
         ServiceOrder order = adminOrderManageMapper.getOrderDetailById(id);
         if (order == null) {
-            throw new RuntimeException("工单不存在");
+            throw new BusinessException("工单不存在");
         }
         //判断工单的用户id和当前用户id是否一致
         if(!order.getUserId().equals(userId)){
-            throw new RuntimeException("无权操作此订单");
+            throw new BusinessException("无权操作此订单");
         }
         //判断订单的状态是否==0
         if(order.getStatus()!=0){
-            throw new RuntimeException("订单状态不可支付");
+            throw new BusinessException("订单状态不可支付");
         }
         if(order.getPayExpireTime().isBefore(LocalDateTime.now())){
             //判断支付时间是否过期
-            throw new RuntimeException("订单超时请重新下单");
+            throw new BusinessException("订单超时请重新下单");
         }
         //更改支付状态和下单时间
         order.setPayStatus(1);
@@ -164,10 +166,10 @@ public class UserOrderServiceImpl implements UserOrderService {
         //判断订单是否存在
         if (order == null) {
             //不存在抛出错误
-            throw new RuntimeException("订单不存在");
+            throw new BusinessException("订单不存在");
         }
         if(!order.getUserId().equals(userId)){
-            throw new RuntimeException("无权操作此订单");
+            throw new BusinessException("无权操作此订单");
         }
         order.setCancelReason("用户主动取消");
         //调用状态机更改对应的数据以及更新日志
@@ -228,23 +230,23 @@ public class UserOrderServiceImpl implements UserOrderService {
         //判断订单是否存在
         if (order == null) {
             //不存在抛出错误
-            throw new RuntimeException("订单不存在");
+            throw new BusinessException("订单不存在");
         }
         //判断是不是当前用户的订单
         if(!order.getUserId().equals(userId)){
-            throw new RuntimeException("无权操作此订单");
+            throw new BusinessException("无权操作此订单");
         }
         //判断当前订单状态是不是已完成
         if(order.getStatus()!=3){
-            throw new RuntimeException("订单状态不能被评价");
+            throw new BusinessException("订单状态不能被评价");
         }
         if (order.getWorkerId()==null){
-            throw new RuntimeException("订单状态异常");
+            throw new BusinessException("订单状态异常");
         }
         //查看订单是否已经评价
         ServiceOrderComment exist= userOrderCommentMapper.getByOrderId(order.getId());
         if (exist != null) {
-            throw new RuntimeException("订单已被评价，不可重复评价");
+            throw new BusinessException("订单已被评价，不可重复评价");
         }
         //提交评论到comment表
         ServiceOrderComment comment = ServiceOrderComment.builder()

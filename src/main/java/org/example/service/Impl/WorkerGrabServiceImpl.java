@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import jakarta.annotation.Resource;
 import org.example.context.BaseContext;
 import org.example.entity.ServiceOrder;
@@ -48,10 +50,10 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
         //查询工人信息
         Worker worker = workerAdminMapper.getByWorkerId(workerId);
         if (worker.getServiceStatus()!=1){
-            throw new RuntimeException("当前状态不可接单");
+            throw new BusinessException("当前状态不可接单");
         }
         if (worker.getStatus()==0){
-            throw new RuntimeException("封禁账号无法操作");
+            throw new BusinessException("封禁账号无法操作");
         }
         //获取redission锁
         RLock lock = redissonClient.getLock("lock:order:" + id);
@@ -62,7 +64,7 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
 
             //判断是否拿到了
             if (!acquired){
-                throw new RuntimeException(" 抢单繁忙，请稍后重试");
+                throw new BusinessException(" 抢单繁忙，请稍后重试");
             }
             //  关键：不在 finally 里 unlock，注册到事务回调，事务提交后才释放锁
             TransactionSynchronizationManager.registerSynchronization(
@@ -77,10 +79,10 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
             );
             //根据id查询订单
             ServiceOrder orders = adminOrderManageMapper.getOrderDetailById(id);
-            if (orders == null) throw new RuntimeException("工单不存在");
-            if (orders.getStatus() != 0) throw new RuntimeException("工单已被抢");
+            if (orders == null) throw new BusinessException("工单不存在");
+            if (orders.getStatus() != 0) throw new BusinessException("工单已被抢");
             if (!Integer.valueOf(1).equals(orders.getPayStatus())) {
-                throw new RuntimeException("工单未支付，不能接单");
+                throw new BusinessException("工单未支付，不能接单");
             }
             orders.setWorkerId(workerId);
             orderStatusService.transition(orders,1,"worker",
@@ -88,7 +90,7 @@ public class WorkerGrabServiceImpl implements WorkerGrabService {
 
         }catch (InterruptedException e){
             Thread.currentThread().interrupt();
-            throw new RuntimeException("抢单被中断");
+            throw new BusinessException("抢单被中断");
         }
     }
 }

@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import jakarta.annotation.Resource;
 import org.example.context.BaseContext;
 import org.example.dto.WorkerDTO.WorkerProfileDTO;
@@ -33,7 +35,7 @@ public class WorkerProfileServiceImpl implements WorkerProfileService {
         Worker worker = workerAdminMapper.getMoreByWorkerId(workerId);
        //判空
         if (worker == null) {
-            throw new RuntimeException("工人不存在");
+            throw new BusinessException("工人不存在");
         }
         //封装VO
       return WorkerProfileVO.builder()
@@ -98,11 +100,11 @@ public class WorkerProfileServiceImpl implements WorkerProfileService {
         Worker worker = workerAdminMapper.getByWorkerId(workerId);
         //查看接单状态
         if (worker == null) {
-            throw new RuntimeException("用户不存在");
+            throw new BusinessException("用户不存在");
         }
         Integer serviceStatus = worker.getServiceStatus();
         if (serviceStatus == 2) {
-            throw new RuntimeException("服务中不可更改工单状态");
+            throw new BusinessException("服务中不可更改工单状态");
         }
         //如果是接单的话//改成下线\
         if (serviceStatus == 1) {

@@ -1,6 +1,8 @@
 package org.example.controller.ai;
 
 
+
+import org.example.handler.BusinessException;
 import com.github.xiaoymin.knife4j.annotations.ApiOperationSupport;
 import io.jsonwebtoken.io.IOException;
 import io.swagger.v3.oas.annotations.Operation;
@@ -33,7 +35,7 @@ public class AdminChatController {
 
        Employee i=adminLoginMapper.getById(adminId);
        if (i==null){
-           throw new RuntimeException("无权上传文件");
+           throw new BusinessException("无权上传文件");
        }
 
         return Result.success(ragService.ragSave(file));

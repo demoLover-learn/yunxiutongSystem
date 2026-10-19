@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import com.github.pagehelper.Page;
 import com.github.pagehelper.PageHelper;
 import jakarta.annotation.Resource;
@@ -59,7 +61,7 @@ public class UserServiceServiceImpl implements UserServiceService {
         //判断服务项目是否存在
         if (serviceItem== null ) {
             //不存在返回错误
-            throw new RuntimeException("服务项目不存在");
+            throw new BusinessException("服务项目不存在");
         }
         ServiceItemVO vo = new ServiceItemVO();
         BeanUtils.copyProperties(serviceItem, vo);

@@ -1,5 +1,7 @@
 package org.example.service.Impl;
 
+
+import org.example.handler.BusinessException;
 import org.example.dto.AdminDTO.LoginDTO;
 import org.example.entity.Employee;
 import org.example.mapper.AdminLoginMapper;
@@ -33,18 +35,18 @@ public class AdminLoginServiceImpl implements AdminLoginService {
         if (stored.startsWith("$2a$")) {
             // 已是 BCrypt 密文，直接比对
             if (!bCryptPasswordEncoder.matches(loginDTO.getPassword(), stored)) {
-                throw new RuntimeException("账号或者密码错误");
+                throw new BusinessException("账号或者密码错误");
             }
         } else {
             // 历史明文密码：先明文比对，通过则顺手升级为 BCrypt
             if (!stored.equals(loginDTO.getPassword())) {
-                throw new RuntimeException("账号或者密码错误");
+                throw new BusinessException("账号或者密码错误");
             }
             employee.setPassword(bCryptPasswordEncoder.encode(loginDTO.getPassword()));
             adminLoginMapper.updatePassword(employee);
         }
         if (employee.getStatus() == 0) {
-            throw new RuntimeException("账号已经被锁定");
+            throw new BusinessException("账号已经被锁定");
         }
         return employee;
     }
